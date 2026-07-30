@@ -1,0 +1,197 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body {
+      font-family: 'IBM Plex Serif', serif;
+      background: #101010;
+      color: #fcfcfc;
+      letter-spacing: 0;
+      --accent: #222;
+      --border: #363636;
+      --divider: #222;
+      --overlay: rgba(0,0,0,0.82);
+    }
+    h1, h2, h3 {
+      font-family: 'IBM Plex Serif', serif;
+      letter-spacing: -0.02em;
+    }
+    .mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.98em;
+      letter-spacing: 0.01em;
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px) scale(0.98);
+      animation: fadeInUp 0.9s cubic-bezier(.45,.05,.55,.95) forwards;
+    }
+    .fade-in-1 { animation-delay: 0.1s; }
+    .fade-in-2 { animation-delay: 0.25s; }
+    .fade-in-3 { animation-delay: 0.45s; }
+    .fade-in-4 { animation-delay: 0.65s; }
+    .fade-in-5 { animation-delay: 0.85s; }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .divider {
+      border: none;
+      border-top: 1.5px solid var(--divider);
+      margin: 0;
+    }
+    .museum-canvas {
+      border: 1.5px solid var(--border);
+      background: #161616;
+      transition: border 0.23s, box-shadow 0.23s, background 0.23s;
+      box-shadow: 0 2px 8px 0 #0003;
+      cursor: pointer;
+      position: relative;
+    }
+    .museum-canvas:focus-within,
+    .museum-canvas:hover {
+      border: 2.5px solid #eee;
+      background: #181818;
+      box-shadow: 0 8px 32px 0 #0003, 0 1.5px 8px 0 #0002;
+      outline: none;
+      z-index: 2;
+    }
+    .museum-canvas img {
+      transition: filter 0.38s cubic-bezier(.4,0,.2,1), transform 0.38s cubic-bezier(.4,0,.2,1);
+    }
+    .museum-canvas:focus-within img,
+    .museum-canvas:hover img {
+      filter: grayscale(1) contrast(0.93) brightness(0.95);
+      transform: scale(1.025) rotate(-0.3deg);
+    }
+    .museum-section {
+      background: #181818;
+      border-radius: 1.8rem;
+      border: 1.5px solid var(--border);
+    }
+    .project-modal {
+      position: fixed;
+      inset: 0;
+      background: var(--overlay);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: modalIn 0.28s cubic-bezier(.44,.05,.55,.98);
+    }
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    .modal-content {
+      background: #181818;
+      color: #f8f8f8;
+      border-radius: 1.5rem;
+      padding: 2.2rem 2.3rem 2.2rem 2.3rem;
+      box-shadow: 0 8px 32px 0 #000c, 0 1.5px 8px 0 #0003;
+      max-width: 440px;
+      width: 100%;
+      position: relative;
+      outline: none;
+      border: 1.5px solid var(--border);
+      animation: fadeInUp 0.35s cubic-bezier(.44,.05,.55,.98);
+    }
+    .modal-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.3rem;
+      background: none;
+      border: none;
+      color: #fcfcfc;
+      padding: 0.3em 0.5em;
+      border-radius: 0.5em;
+      font-size: 1.3em;
+      cursor: pointer;
+      transition: background 0.13s;
+      outline: none;
+    }
+    .modal-close:focus,
+    .modal-close:hover {
+      background: #222;
+      color: #fff;
+    }
+    .project-thumb {
+      width: 92px;
+      height: 92px;
+      border-radius: 1rem;
+      object-fit: cover;
+      object-position: center;
+      border: 1.5px solid var(--border);
+      display: block;
+      margin: 0 auto 1.1rem auto;
+      filter: grayscale(1);
+    }
+    ::-webkit-scrollbar { width: 8px; background: #181818; }
+    ::-webkit-scrollbar-thumb { background: #232323; border-radius: 4px; }
+    @media (max-width: 600px) {
+      .modal-content { padding: 1.4rem 1rem; }
+      .museum-section { padding: 1.2rem !important; }
+    }
+    .logo-marquee {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 64px;
+      background: #161616;
+      border-radius: 1.4rem;
+      border: 1.5px solid var(--border);
+      margin-top: 1.7rem;
+      margin-bottom: 3.2rem;
+    }
+    .logo-track {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      animation: marquee 30s linear infinite;
+      gap: 2.5rem;
+    }
+    .logo-track:hover {
+      animation-play-state: paused;
+    }
+    .brand-logo {
+      height: 38px;
+      width: auto;
+      opacity: 0.77;
+      filter: grayscale(1) brightness(1.2);
+      transition: opacity 0.2s, filter 0.2s, transform 0.23s;
+      cursor: pointer;
+      padding: 0 0.4rem;
+      outline: none;
+    }
+    .brand-logo:focus,
+    .brand-logo:hover {
+      opacity: 1;
+      filter: grayscale(0) brightness(1.1) drop-shadow(0 2px 8px #fff2);
+      transform: scale(1.06) translateY(-2px);
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @media (max-width: 600px) {
+      .logo-marquee { height: 54px; }
+      .brand-logo { height: 28px; }
+      .logo-track { gap: 1.5rem; }
+    }
+  

@@ -1,0 +1,33 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+* { font-family: 'Inter', sans-serif; }
+.font-display { font-family: 'Montserrat', sans-serif; }
+.hero-fade-in { opacity: 0; transform: translateY(30px); animation: fadeInUp 1s ease-out forwards; }
+.hero-fade-in-delay-1 { animation-delay: 0.3s; }
+.hero-fade-in-delay-2 { animation-delay: 0.6s; }
+.hero-fade-in-delay-3 { animation-delay: 0.9s; }
+.hero-fade-in-delay-4 { animation-delay: 1.2s; }
+.nav-fade-in { opacity: 0; animation: fadeIn 0.8s ease-out forwards; }
+.float-animation { animation: float 6s ease-in-out infinite; }
+.float-animation-delay { animation: float 6s ease-in-out infinite; animation-delay: 2s; }
+.section-fade-in { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
+.section-fade-in.visible { opacity: 1; transform: translateY(0); }
+@keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+.video-overlay { background: linear-gradient(135deg, rgba(37, 99, 235, 0.8) 0%, rgba(37, 99, 235, 0.4) 50%, transparent 100%); }
+.glass-morphism { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+.custom-cursor { cursor: none; }
+.cursor-dot { width: 8px; height: 8px; position: fixed; border-radius: 50%; background: #2563EB; pointer-events: none; z-index: 9999; transition: transform 0.1s ease; }
+.cursor-ring { width: 40px; height: 40px; position: fixed; border-radius: 50%; border: 2px solid rgba(37, 99, 235, 0.3); pointer-events: none; z-index: 9998; transition: all 0.3s ease; }
+

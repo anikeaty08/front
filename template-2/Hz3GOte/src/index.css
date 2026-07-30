@@ -1,0 +1,68 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            overflow: hidden;
+            cursor: none; /* Hide the default cursor */
+            font-family: Arial, sans-serif;
+        }
+
+        .content {
+            color: white;
+            text-align: center;
+            padding-top: 20vh;
+        }
+
+        .cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            transition: width 0.3s, height 0.3s, background 0.3s;
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 10000;
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+
+        .particles {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            pointer-events: none;
+            opacity: 0;
+        }
+    

@@ -1,0 +1,25 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body{font-family: 'SF Pro Text',-apple-system,BlinkMacSystemFont,system-ui,sans-serif}
+.sf-pro-display{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,system-ui,sans-serif}
+.card{transition:all .6s cubic-bezier(.4,0,.2,1);overflow:hidden;position:relative}
+.card:hover{transform:translateY(-12px) scale(1.02);box-shadow:0 25px 50px -12px rgba(0,0,0,.6)}
+.card img{transition:transform .8s cubic-bezier(.4,0,.2,1)}
+.card:hover img{transform:scale(1.08)}
+.card::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.65) 85%);opacity:0;transition:opacity .6s}
+.card:hover::before{opacity:1}
+.glass{backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+@keyframes fadeUp{0%{opacity:0;transform:translateY(40px)}100%{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .8s ease-out forwards;opacity:0}
+.fade-delay-1{animation-delay:.2s}.fade-delay-2{animation-delay:.4s}.fade-delay-3{animation-delay:.6s}
+

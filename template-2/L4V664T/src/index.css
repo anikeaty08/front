@@ -1,0 +1,136 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    /* 60 unique transform-only hover animations */
+    .ani01:hover { animation: ani01 1s linear infinite; }
+    .ani02:hover { animation: ani02 1.1s linear infinite; }
+    .ani03:hover { animation: ani03 0.8s ease-in-out infinite alternate; }
+    .ani04:hover { animation: ani04 1.2s cubic-bezier(.5,1.7,.7,1) infinite alternate; }
+    .ani05:hover { animation: ani05 1.1s linear infinite alternate; }
+    .ani06:hover { animation: ani06 0.7s ease-in-out infinite; }
+    .ani07:hover { animation: ani07 0.6s cubic-bezier(.6,-0.28,.7,1.5) infinite; }
+    .ani08:hover { animation: ani08 0.6s cubic-bezier(.5,.5,.7,1) infinite; }
+    .ani09:hover { animation: ani09 0.7s ease-in-out infinite; }
+    .ani10:hover { animation: ani10 0.8s ease-in-out infinite; }
+    .ani11:hover { animation: ani11 1s linear infinite alternate; }
+    .ani12:hover { animation: ani12 1s ease-in-out infinite alternate; }
+    .ani13:hover { animation: ani13 1s cubic-bezier(.5,1.7,.7,1) infinite alternate; }
+    .ani14:hover { animation: ani14 0.8s cubic-bezier(.7,.2,.3,1.5) infinite alternate; }
+    .ani15:hover { animation: ani15 0.7s linear infinite alternate; }
+    .ani16:hover { animation: ani16 1.3s ease-in-out infinite; }
+    .ani17:hover { animation: ani17 1.1s linear infinite; }
+    .ani18:hover { animation: ani18 1.2s linear infinite; }
+    .ani19:hover { animation: ani19 0.85s cubic-bezier(.5,1.7,.7,1) infinite alternate; }
+    .ani20:hover { animation: ani20 0.6s ease-in-out infinite; }
+    .ani21:hover { animation: ani21 0.9s linear infinite alternate; }
+    .ani22:hover { animation: ani22 1s cubic-bezier(.5,1.7,.7,1) infinite alternate; }
+    .ani23:hover { animation: ani23 0.8s ease-in infinite; }
+    .ani24:hover { animation: ani24 1s ease-in-out infinite alternate; }
+    .ani25:hover { animation: ani25 1.1s linear infinite; }
+    .ani26:hover { animation: ani26 0.7s linear infinite alternate; }
+    .ani27:hover { animation: ani27 0.8s ease-in-out infinite; }
+    .ani28:hover { animation: ani28 1.2s cubic-bezier(.5,1.7,.7,1) infinite alternate; }
+    .ani29:hover { animation: ani29 1.1s linear infinite alternate; }
+    .ani30:hover { animation: ani30 0.7s ease-in-out infinite; }
+    .ani31:hover { animation: ani31 0.6s cubic-bezier(.6,-0.28,.7,1.5) infinite; }
+    .ani32:hover { animation: ani32 0.7s cubic-bezier(.5,.5,.7,1) infinite; }
+    .ani33:hover { animation: ani33 0.7s ease-in-out infinite; }
+    .ani34:hover { animation: ani34 0.8s ease-in-out infinite; }
+    .ani35:hover { animation: ani35 1s linear infinite alternate; }
+    .ani36:hover { animation: ani36 1s ease-in-out infinite alternate; }
+    .ani37:hover { animation: ani37 1s cubic-bezier(.5,1.7,.7,1) infinite alternate; }
+    .ani38:hover { animation: ani38 0.8s cubic-bezier(.7,.2,.3,1.5) infinite alternate; }
+    .ani39:hover { animation: ani39 0.7s linear infinite alternate; }
+    .ani40:hover { animation: ani40 1.3s ease-in-out infinite; }
+    .ani41:hover { animation: ani41 1.1s linear infinite; }
+    .ani42:hover { animation: ani42 1.2s linear infinite; }
+    .ani43:hover { animation: ani43 0.85s cubic-bezier(.5,1.7,.7,1) infinite alternate; }
+    .ani44:hover { animation: ani44 0.6s ease-in-out infinite; }
+    .ani45:hover { animation: ani45 0.9s linear infinite alternate; }
+    .ani46:hover { animation: ani46 1s cubic-bezier(.5,1.7,.7,1) infinite alternate; }
+    .ani47:hover { animation: ani47 0.8s ease-in infinite; }
+    .ani48:hover { animation: ani48 1s ease-in-out infinite alternate; }
+    .ani49:hover { animation: ani49 1.1s linear infinite; }
+    .ani50:hover { animation: ani50 0.7s linear infinite alternate; }
+    .ani51:hover { animation: ani51 0.8s ease-in-out infinite; }
+    .ani52:hover { animation: ani52 1.2s cubic-bezier(.,1.7,.7,1) infinite alternate; }
+    .ani53:hover { animation: ani53 1.1s linear infinite alternate; }
+    .ani54:hover { animation: ani54 0.7s ease-in-out infinite; }
+    .ani55:hover { animation: ani55 0.6s cubic-bezier(.6,-0.28,.7,1.5) infinite; }
+    .ani56:hover { animation: ani56 0.7s cubic-bezier(.5,.5,.7,1) infinite; }
+    .ani57:hover { animation: ani57 0.7s ease-in-out infinite; }
+    .ani58:hover { animation: ani58 0.8s ease-in-out infinite; }
+    .ani59:hover { animation: ani59 1s linear infinite alternate; }
+    .ani60:hover { animation: ani60 1.1s cubic-bezier(.5,1.7,.7,1) infinite alternate; }
+
+    /* Keyframes for each effect */
+    @keyframes ani01 { to { transform: rotate(360deg); } }
+    @keyframes ani02 { to { transform: rotateY(360deg); } }
+    @keyframes ani03 { to { transform: rotateX(360deg); } }
+    @keyframes ani04 { 50% { transform: scale(1.15);} }
+    @keyframes ani05 { 100% { transform: scale(1.25);} }
+    @keyframes ani06 { 100% { transform: scale(0.8);} }
+    @keyframes ani07 { 50% { transform: skewX(20deg);} }
+    @keyframes ani08 { 50% { transform: skewY(20deg);} }
+    @keyframes ani09 { 30% { transform: skew(15deg, 15deg);} 70% { transform: skew(-15deg, -15deg);} }
+    @keyframes ani10 { 100% { transform: translateX(30px);} }
+    @keyframes ani11 { 100% { transform: translateY(30px);} }
+    @keyframes ani12 { 100% { transform: rotateY(180deg);} }
+    @keyframes ani13 { 100% { transform: rotateX(180deg);} }
+    @keyframes ani14 { 50% { transform: rotate(180deg) scale(1.2);} }
+    @keyframes ani15 { 0%,100% { transform: translateY(0);} 30% { transform: translateY(-20px);} 60% { transform: translateY(-10px);} }
+    @keyframes ani16 { 10%,90% { transform: translateX(-2px);} 20%,80% { transform: translateX(3px);} 30%,70% { transform: translateX(-6px);} 40%,60% { transform: translateX(6px);} }
+    @keyframes ani17 { 30% { transform: scaleX(1.20) scaleY(0.80);} 40% { transform: scaleX(0.80) scaleY(1.20);} 50% { transform: scaleX(1.10) scaleY(0.90);} 65% { transform: scaleX(.95) scaleY(1.05);} 75% { transform: scaleX(1.05) scaleY(.95);} 100% { transform: scaleX(1) scaleY(1);} }
+    @keyframes ani18 { 25% { transform: scale(0.92, 1.08);} 50% { transform: scale(1.08, 0.92);} 75% { transform: scale(0.98, 1.02);} }
+    @keyframes ani19 { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-14px);} }
+    @keyframes ani20 { 100% { transform: rotate3d(1, 1, 1, 360deg);} }
+    @keyframes ani21 { 20% { transform: rotateY(90deg);} 40% { transform: rotateY(180deg);} 60% { transform: rotateY(270deg);} 80%,100% { transform: rotateY(360deg);} }
+    @keyframes ani22 { 50% { transform: translateY(-40px) scale(1.1);} }
+    @keyframes ani23 { 14% { transform: scale(1.15);} 28% { transform: scale(1);} 42% { transform: scale(1.15);} 70% { transform: scale(1);} }
+    @keyframes ani24 { 0% { transform: scale(1) rotate(0deg); } 100% { transform: scale(1.3) rotate(10deg);} }
+    @keyframes ani25 { 0% { transform: perspective(300px) rotateY(0deg);} 100% { transform: perspective(300px) rotateY(40deg);} }
+    @keyframes ani26 { 0% { transform: perspective(200px) rotateX(0deg);} 100% { transform: perspective(200px) rotateX(50deg);} }
+    @keyframes ani27 { 0% { transform: scale(1);} 100% { transform: scale(0.7) rotate(-8deg);} }
+    @keyframes ani28 { 0% { transform: rotate(0deg);} 100% { transform: rotate(-180deg);} }
+    @keyframes ani29 { 0% { transform: scale(1);} 100% { transform: scale(1.15) skewY(10deg);} }
+    @keyframes ani30 { 0% { transform: scale(1);} 100% { transform: scale(0.85) skewX(-10deg);} }
+    @keyframes ani31 { 0% { transform: rotate(0deg);} 100% { transform: rotate(10deg) scale(1.2);} }
+    @keyframes ani32 { 0% { transform: rotate(0deg);} 100% { transform: rotate(-10deg) scale(0.8);} }
+    @keyframes ani33 { 0% { transform: translate(0,0);} 50% { transform: translate(10px,-10px);} 100% { transform: translate(0,0);} }
+    @keyframes ani34 { 0% { transform: rotateY(0deg);} 100% { transform: rotateY(-360deg);} }
+    @keyframes ani35 { 0% { transform: rotateX(0deg);} 100% { transform: rotateX(-360deg);} }
+    @keyframes ani36 { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg) scale(1.08);} }
+    @keyframes ani37 { 0% { transform: scale(1) skewX(0deg);} 100% { transform: scale(1.1) skewX(18deg);} }
+    @keyframes ani38 { 0% { transform: scale(1) skewY(0deg);} 100% { transform: scale(1.1) skewY(18deg);} }
+    @keyframes ani39 { 0% { transform: scale(1);} 100% { transform: scale(0.8) skew(20deg,20deg);} }
+    @keyframes ani40 { 0% { transform: scale(1);} 100% { transform: scale(1.25) skew(-20deg,-20deg);} }
+    @keyframes ani41 { 0% { transform: rotate(0deg);} 100% { transform: rotate(144deg);} }
+    @keyframes ani42 { 0% { transform: rotate(0deg);} 100% { transform: rotate(-144deg);} }
+    @keyframes ani43 { 0% { transform: translateY(0);} 100% { transform: translateY(-30px) scale(1.2);} }
+    @keyframes ani44 { 0% { transform: scale(1) rotate(0deg);} 100% { transform: scale(1.3) rotate(-10deg);} }
+    @keyframes ani45 { 0% { transform: perspective(400px) rotateY(0deg);} 100% { transform: perspective(400px) rotateY(-40deg);} }
+    @keyframes ani46 { 0% { transform: perspective(250px) rotateX(0deg);} 100% { transform: perspective(250px) rotateX(-50deg);} }
+    @keyframes ani47 { 0% { transform: scale(1);} 100% { transform: scale(0.7) rotate(8deg);} }
+    @keyframes ani48 { 0% { transform: rotate(0deg);} 100% { transform: rotate(90deg);} }
+    @keyframes ani49 { 0% { transform: scale(1);} 100% { transform: scale(1.15) skewY(-10deg);} }
+    @keyframes ani50 { 0% { transform: scale(1);} 100% { transform: scale(0.85) skewX(10deg);} }
+    @keyframes ani51 { 0% { transform: rotate(0deg);} 100% { transform: rotate(20deg) scale(1.2);} }
+    @keyframes ani52 { 0% { transform: rotate(0deg);} 100% { transform: rotate(-20deg) scale(0.8);} }
+    @keyframes ani53 { 0% { transform: translate(0,0);} 50% { transform: translate(-10px,10px);} 100% { transform: translate(0,0);} }
+    @keyframes ani54 { 0% { transform: rotateY(0deg);} 100% { transform: rotateY(180deg);} }
+    @keyframes ani55 { 0% { transform: rotateX(0deg);} 100% { transform: rotateX(-180deg);} }
+    @keyframes ani56 { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg) scale(0.92);} }
+    @keyframes ani57 { 0% { transform: scale(1) skewX(0deg);} 100% { transform: scale(1.1) skewX(-18deg);} }
+    @keyframes ani58 { 0% { transform: scale(1) skewY(0deg);} 100% { transform: scale(1.1) skewY(-18deg);} }
+    @keyframes ani59 { 0% { transform: scale(1);} 100% { transform: scale(0.8) skew(-20deg,-20deg);} }
+    @keyframes ani60 { 0% { transform: scale(1);} 100% { transform: scale(1.25) skew(20deg,20deg);} }
+  

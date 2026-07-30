@@ -1,0 +1,234 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }
+
+
+@keyframes sway3d {
+0%   { transform: translateX(-10px) rotateY(12deg) rotateX(1deg); }
+50%  { transform: translateX(10px)  rotateY(-12deg) rotateX(-1deg); }
+100% { transform: translateX(-10px) rotateY(12deg) rotateX(1deg); }
+}
+.animate-sway3d {
+animation: sway3d 6s ease-in-out infinite;
+display: inline-block;
+transform-style: preserve-3d;
+}
+/* Card 1: Chat typing and typewriter animations */
+@keyframes typingDots {
+0% { opacity: 0.3; }
+50% { opacity: 1; }
+100% { opacity: 0.3; }
+}
+@keyframes typewriter {
+from { width: 0; }
+to { width: 100%; }
+}
+@keyframes numberCount {
+0% { opacity: 0; transform: translateY(10px); }
+100% { opacity: 1; transform: translateY(0); }
+}
+.typing-dot-1 { animation: typingDots 1.4s ease-in-out infinite 0s; }
+.typing-dot-2 { animation: typingDots 1.4s ease-in-out infinite 0.2s; }
+.typing-dot-3 { animation: typingDots 1.4s ease-in-out infinite 0.4s; }
+/* Card 2: UI elements reveal animations */
+@keyframes uiReveal {
+from {
+opacity: 0;
+transform: translateY(20px) scale(0.95);
+}
+to {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+}
+@keyframes countUp {
+from { transform: scale(0.8); opacity: 0; }
+to { transform: scale(1); opacity: 1; }
+}
+/* Card 3: Code scrolling animation */
+@keyframes codeScroll {
+from { transform: translateY(0); }
+to { transform: translateY(-100%); }
+}
+.code-scroll {
+animation: codeScroll 15s linear infinite;
+}
+.code-container:hover .code-scroll {
+animation-play-state: paused;
+}
+/* Card 4: AI spotlight and shuffle animations */
+@keyframes aiSpotlight {
+0% {
+transform: translateX(-100%) rotate(-45deg);
+opacity: 0;
+}
+50% {
+opacity: 1;
+}
+100% {
+transform: translateX(200%) rotate(-45deg);
+opacity: 0;
+}
+}
+@keyframes widgetShuffle {
+0%, 100% {
+transform: translateX(0) translateY(0) scale(1);
+opacity: 1;
+}
+25% {
+transform: translateX(10px) translateY(-5px) scale(0.95);
+opacity: 0.8;
+}
+50% {
+transform: translateX(-5px) translateY(10px) scale(1.05);
+opacity: 0.9;
+}
+75% {
+transform: translateX(8px) translateY(-8px) scale(0.98);
+opacity: 0.85;
+}
+}
+.ai-spotlight {
+animation: aiSpotlight 3s ease-in-out infinite 2s;
+}
+.widget-shuffle-1 { animation: widgetShuffle 2s ease-in-out infinite 0.5s; }
+.widget-shuffle-2 { animation: widgetShuffle 2s ease-in-out infinite 1s; }
+.widget-shuffle-3 { animation: widgetShuffle 2s ease-in-out infinite 1.5s; }
+.widget-shuffle-4 { animation: widgetShuffle 2s ease-in-out infinite 2s; }
+/* Team collaboration grid animations */
+@keyframes gridPulse {
+0%, 100% {
+opacity: 0.3;
+transform: scale(1);
+}
+50% {
+opacity: 1;
+transform: scale(1.05);
+}
+}
+@keyframes gridActivate {
+0% {
+opacity: 0.3;
+box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+}
+50% {
+opacity: 1;
+box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2);
+}
+100% {
+opacity: 0.6;
+box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+}
+}
+@keyframes centerGlow {
+0%, 100% {
+box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.25);
+}
+50% {
+box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6), 0 0 20px rgba(56, 189, 248, 0.3);
+}
+}
+.grid-item-1 { animation: gridActivate 4s ease-in-out infinite 0.5s; }
+.grid-item-2 { animation: gridActivate 4s ease-in-out infinite 1.2s; }
+.grid-item-3 { animation: gridActivate 4s ease-in-out infinite 0.8s; }
+.grid-item-4 { animation: gridActivate 4s ease-in-out infinite 2.1s; }
+.grid-item-5 { animation: centerGlow 3s ease-in-out infinite; }
+.grid-item-6 { animation: gridActivate 4s ease-in-out infinite 1.7s; }
+.grid-item-7 { animation: gridActivate 4s ease-in-out infinite 0.3s; }
+.grid-item-8 { animation: gridActivate 4s ease-in-out infinite 1.9s; }
+.grid-item-9 { animation: gridActivate 4s ease-in-out infinite 1.4s; }
+
+
+
+    .segmented-control {
+      position: relative;
+      padding: 1px;
+      border-radius: 100px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    
+    .segmented-control::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      width: 400%;
+      height: 100%;
+      background: linear-gradient(115deg, #d1d1d1, #02367b, #a7bfde);
+      background-size: 25% 100%;
+      animation: border-shift .75s linear infinite;
+    }
+    
+    @keyframes border-shift {
+      to {
+        transform: translateX(-25%);
+      }
+    }
+    
+    .segmented-control-inner {
+      position: relative;
+      display: inline-flex;
+      background: rgba(5, 8, 15, 0.96); /* darker + more contrast */
+      border-radius: 100px;
+      height: 100%;
+      backdrop-filter: blur(12px);
+    }
+  
+
+
+    @keyframes rotateCircle {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes counterRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(-360deg); }
+    }
+    #aura-emfe3pp6g:hover {
+      animation-play-state: paused;
+    }
+    #aura-emfe3pp6g:hover .counter-rotate {
+      animation-play-state: paused;
+    }
+  

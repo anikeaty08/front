@@ -1,0 +1,109 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    :root {
+      --border-color: #e5e7eb;
+      --background-color: #ffffff;
+      --heading-color: #111827;
+      --subheading-color: #374151;
+      --body-color: #6b7280;
+      --accent-color: #3b82f6;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f9fafb;
+      color: var(--body-color);
+      line-height: 1.5;
+      padding: 2rem;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+    }
+    
+    .features-container {
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .feature-card {
+      background-color: var(--background-color);
+      border-radius: 0.5rem;
+      border: 1px solid var(--border-color);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+    
+    .icon-wrapper {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      width: 48px;
+      background-color: rgba(59, 130, 246, 0.1);
+      border-radius: 0.5rem;
+      margin-bottom: 1.25rem;
+      color: var(--accent-color);
+    }
+    
+    .feature-heading {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 24px;
+      color: var(--heading-color);
+      letter-spacing: -0.025em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .feature-subheading {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--subheading-color);
+      margin-bottom: 0.75rem;
+    }
+    
+    .feature-body {
+      font-size: 14px;
+      color: var(--body-color);
+      flex-grow: 1;
+    }
+    
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, auto);
+      }
+    }
+  

@@ -1,0 +1,80 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body, html { margin: 0; padding: 0; background: #181025; min-height: 100vh; font-family: ui-sans-serif, system-ui, sans-serif; }
+    canvas#neuro {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      opacity: .95;
+      z-index: 0;
+    }
+    .outline-style,
+    .outline-btn,
+    .outline-card {
+      border: 2px solid rgba(255,255,255,0.10) !important;
+      background: transparent;
+      box-shadow: none;
+    }
+    @keyframes slideInLeft { 
+      from { opacity: 0; transform: translateX(-40px); } 
+      to { opacity: 1; transform: translateX(0); } 
+    }
+    @keyframes slideInRight { 
+      from { opacity: 0; transform: translateX(40px); } 
+      to { opacity: 1; transform: translateX(0); } 
+    }
+    @keyframes slideInUp { 
+      from { opacity: 0; transform: translateY(40px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
+    .animate-seq-1 { animation: slideInLeft 0.8s both; }
+    .animate-seq-2 { animation: slideInRight 0.8s both; animation-delay: 0.2s;}
+    .animate-seq-3 { animation: slideInUp 0.8s both; animation-delay: 0.4s;}
+    .animate-seq-4 { animation: slideInUp 0.8s both; animation-delay: 0.6s;}
+    .geist-heading {
+      font-family: 'Geist', ui-sans-serif, system-ui, sans-serif !important;
+      font-weight: 300 !important;
+      letter-spacing: -0.02em !important;
+      color: #fff !important;
+      margin-bottom: 0.5em;
+    }
+    .geist-h1 {
+      font-size: 48px !important;
+      line-height: 1.05 !important;
+    }
+    @media (min-width: 768px) {
+      .geist-h1 { font-size: 64px !important; }
+    }
+    .geist-h2 {
+      font-size: 20px !important;
+      line-height: 1.2 !important;
+    }
+    @media (min-width: 768px) {
+      .geist-h2 { font-size: 20px !important; }
+    }
+    .geist-h3 {
+      font-size: 16px !important;
+      line-height: 1.2 !important;
+    }
+    @media (min-width: 768px) {
+      .geist-h3 { font-size: 20px !important; }
+    }
+    .font-sans, .font-inter {
+      font-family: ui-sans-serif, system-ui, sans-serif !important;
+    }
+    .tight-letter { letter-spacing: -0.02em !important; }
+    .text-white-important, .text-white, .font-sans, .font-inter, .tight-letter, h1, h2, h3, h4, h5, h6, p, span, a, footer, nav { color: #fff !important; }
+    a { text-decoration: none !important; }
+  

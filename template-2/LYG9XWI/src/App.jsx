@@ -1,0 +1,243 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+    window.onload = function() {
+      const canvas = document.getElementById('shader-canvas');
+      const gl = canvas.getContext('webgl');
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const vertexShaderSource = `
+        attribute vec2 aPosition;
+        void main() {
+          gl_Position = vec4(aPosition, 0.0, 1.0);
+        }
+      `;
+
+      const fragmentShaderSource = `
+        precision highp float;
+        uniform float iTime;
+        uniform vec2 iResolution;
+        mat2 rotate2d(float angle){
+          float c = cos(angle), s = sin(angle);
+          return mat2(c, -s, s, c);
+        }
+        float variation(vec2 v1, vec2 v2, float strength, float speed) {
+          return sin(
+              dot(normalize(v1), normalize(v2)) * strength + iTime * speed
+          ) / 100.0;
+        }
+        vec3 paintCircle (vec2 uv, vec2 center, float rad, float width) {
+          vec2 diff = center-uv;
+          float len = length(diff);
+          len += variation(diff, vec2(0.0, 1.0), 5.0, 2.0);
+          len -= variation(diff, vec2(1.0, 0.0), 5.0, 2.0);
+          float circle = smoothstep(rad-width, rad, len) - smoothstep(rad, rad+width, len);
+          return vec3(circle);
+        }
+        void main() {
+          vec2 uv = gl_FragCoord.xy / iResolution.xy;
+          uv.x *= 1.5;
+          uv.x -= 0.25;
+          vec3 color = vec3(0.0);
+          float radius = 0.35;
+          vec2 center = vec2(0.5);
+          color += paintCircle(uv, center, radius, 0.035);
+          color += paintCircle(uv, center, radius - 0.018, 0.01);
+          color += paintCircle(uv, center, radius + 0.018, 0.005);
+          vec2 v = rotate2d(iTime) * uv;
+          color *= vec3(v.x, v.y, 0.7-v.y*v.x);
+          color += paintCircle(uv, center, radius, 0.003);
+          gl_FragColor = vec4(color, 1.0);
+        }
+      `;
+
+      function compileShader(type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          throw new Error(gl.getShaderInfoLog(shader));
+        }
+        return shader;
+      }
+
+      const vertexShader = compileShader(gl.VERTEX_SHADER, vertexShaderSource);
+      const fragmentShader = compileShader(gl.FRAGMENT_SHADER, fragmentShaderSource);
+
+      const program = gl.createProgram();
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
+      gl.linkProgram(program);
+
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        throw new Error(gl.getProgramInfoLog(program));
+      }
+
+      gl.useProgram(program);
+
+      const buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+        -1, -1,
+         1, -1,
+        -1,  1,
+        -1,  1,
+         1, -1,
+         1,  1,
+      ]), gl.STATIC_DRAW);
+
+      const aPosition = gl.getAttribLocation(program, 'aPosition');
+      gl.enableVertexAttribArray(aPosition);
+      gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+
+      const iTimeLoc = gl.getUniformLocation(program, 'iTime');
+      const iResLoc = gl.getUniformLocation(program, 'iResolution');
+
+      function render(time) {
+        gl.uniform1f(iTimeLoc, time * 0.001);
+        gl.uniform2f(iResLoc, canvas.width, canvas.height);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        requestAnimationFrame(render);
+      }
+      requestAnimationFrame(render);
+    };
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+<canvas id="shader-canvas"></canvas>
+<div className="fixed inset-0 z-10 flex items-center justify-center">
+<div className="w-full max-w-5xl mx-auto px-4 flex flex-col md:flex-row gap-8 items-center justify-center">
+
+<div className="relative w-[20rem] glass-effect bg-gradient-to-br from-white/15 to-white/5 border border-white/15 rounded-2xl shadow-xl flex flex-col">
+<div className="absolute inset-0 rounded-2xl border border-white/20 [mask-image:linear-gradient(135deg,white,transparent_60%)] pointer-events-none"></div>
+<div className="flex flex-col h-full p-7 pb-6 gap-5">
+<div>
+<span className="text-xs px-2 py-1 rounded-full bg-white/10 text-white/80 border border-white/20 font-bold tracking-wide">Starter</span>
+<h2 className="mt-3 text-3xl font-bold gradient-text bg-gradient-to-r from-white to-white/70">Free</h2>
+<div className="text-white/70 text-base mt-2">Ideal for individuals & testing</div>
+</div>
+<div className="card-divider w-full my-2"></div>
+<ul className="space-y-2 mt-2 text-white/80">
+<li className="flex items-center gap-2"><i className="fa fa-check-circle text-green-400"></i> 1 Project</li>
+<li className="flex items-center gap-2"><i className="fa fa-check-circle text-green-400"></i> 1 User</li>
+<li className="flex items-center gap-2"><i className="fa fa-check-circle text-green-400"></i> API Access</li>
+<li className="flex items-center gap-2"><i className="fa fa-times-circle text-red-400"></i> Email Support</li>
+<li className="flex items-center gap-2"><i className="fa fa-times-circle text-red-400"></i> Advanced Analytics</li>
+</ul>
+<div className="mt-auto pt-4">
+<button className="w-full py-2 rounded-lg bg-gradient-to-tr from-white/10 to-white/20 border border-white/20 text-white font-semibold hover:bg-white/20 transition">Get Started</button>
+</div>
+</div>
+</div>
+
+<div className="relative w-[22rem] glass-effect bg-gradient-to-br from-[#2bffea22] to-white/10 border border-cyan-400/50 rounded-2xl shadow-2xl scale-105 flex flex-col z-10">
+<div className="absolute inset-0 rounded-2xl border border-cyan-400/40 [mask-image:linear-gradient(135deg,white,transparent_60%)] pointer-events-none"></div>
+<div className="flex flex-col h-full p-8 pb-7 gap-6">
+<div>
+<span className="text-xs px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-100 border border-cyan-400/30 font-bold tracking-wide">Pro</span>
+<h2 className="mt-3 text-4xl font-extrabold gradient-text bg-gradient-to-r from-cyan-400 via-white to-white/80">$19<span className="text-lg font-normal text-white/60">/mo</span></h2>
+<div className="text-white/80 text-base mt-2">For growing teams & projects</div>
+</div>
+<div className="card-divider w-full my-2"></div>
+<ul className="space-y-2 mt-2 text-white/90">
+<li className="flex items-center gap-2"><i className="fa fa-check-circle text-cyan-400"></i> 10 Projects</li>
+<li className="flex items-center gap-2"><i className="fa fa-check-circle text-cyan-400"></i> 5 Users</li>
+<li className="flex items-center gap-2"><i className="fa fa-check-circle text-cyan-400"></i> API + CLI Access</li>
+<li className="flex items-center gap-2"><i className="fa fa-check-circle text-cyan-400"></i> Email Support</li>
+<li className="flex items-center gap-2"><i className="fa fa-times-circle text-red-400"></i> Advanced Analytics</li>
+</ul>
+<div className="mt-auto pt-4">
+<button className="w-full py-2 rounded-lg bg-gradient-to-tr from-cyan-400/80 to-cyan-300/60 text-slate-900 font-bold shadow-md hover:bg-cyan-300/90 border border-cyan-400/70 transition">Upgrade Now</button>
+</div>
+</div>
+</div>
+
+<div className="relative w-[20rem] glass-effect bg-gradient-to-br from-white/15 to-white/5 border border-white/15 rounded-2xl shadow-xl flex flex-col">
+<div className="absolute inset-0 rounded-2xl border border-white/20 [mask-image:linear-gradient(135deg,white,transparent_60%)] pointer-events-none"></div>
+<div className="flex flex-col h-full p-7 pb-6 gap-5">
+<div>
+<span className="text-xs px-2 py-1 rounded-full bg-white/10 text-white/80 border border-white/20 font-bold tracking-wide">Enterprise</span>
+<h2 className="mt-3 text-3xl font-bold gradient-text bg-gradient-to-r from-white via-slate-100 to-cyan-400">Custom</h2>
+<div className="text-white/70 text-base mt-2">Tailored for large organizations</div>
+</div>
+<div className="card-divider w-full my-2"></div>
+<ul className="space-y-2 mt-2 text-white/80">
+<li className="flex items-center gap-2"><i className="fa fa-check-circle text-green-400"></i> Unlimited Projects</li>
+<li className="flex items-center gap-2"><i className="fa fa-check-circle text-green-400"></i> Unlimited Users</li>
+<li className="flex items-center gap-2"><i className="fa fa-check-circle text-green-400"></i> API, CLI & SSO</li>
+<li className="flex items-center gap-2"><i className="fa fa-check-circle text-green-400"></i> Priority Support</li>
+<li className="flex items-center gap-2"><i className="fa fa-check-circle text-green-400"></i> Advanced Analytics</li>
+</ul>
+<div className="mt-auto pt-4">
+<button className="w-full py-2 rounded-lg bg-gradient-to-r from-cyan-400/30 to-white/10 border border-cyan-400/40 text-cyan-100 font-semibold hover:bg-cyan-400/20 transition">Contact Sales</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    </>
+  );
+}

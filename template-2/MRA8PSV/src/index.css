@@ -1,0 +1,42 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+html, body { height: 100%; }
+/* Custom checkbox */
+.chk {
+appearance: none; width: 18px; height: 18px; border-radius: 6px;
+border: 1px solid rgb(203 213 225); background: white; display: grid; place-items: center;
+}
+.chk:checked { background: #6366f1; border-color: #6366f1; }
+.chk:checked::after {
+content: '✓'; color: white; font-size: 12px; font-weight: bold;
+}
+.dark .chk { background: rgb(30 41 59); border-color: rgb(71 85 105); }
+/* Custom toggle */
+.toggle { width: 42px; height: 24px; border-radius: 999px; position: relative; transition: all .2s; }
+.knob { width: 18px; height: 18px; background: white; border-radius: 999px; position: absolute; top: 3px; left: 3px; transition: all .2s; }
+.on .knob { left: 21px; }
+/* Smooth hide/show */
+.page { display: none; }
+.page.active { display: block; }
+/* Status colors */
+.status-new { @apply bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300; }
+.status-hot { @apply bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300; }
+.status-interested { @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300; }
+.status-negotiation { @apply bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300; }
+.status-closed { @apply bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300; }
+/* Multi-select styling */
+.multi-select { position: relative; }
+.multi-select-dropdown { position: absolute; top: 100%; left: 0; right: 0; z-index: 10; max-height: 200px; overflow-y: auto; }
+/* Wizard sticky footer */
+.wizard-footer { position: sticky; bottom: 0; left: 0; right: 0; }
+

@@ -1,0 +1,57 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; }
+    /* Animated gradient background keyframes */
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .animate-gradient {
+      background: linear-gradient(120deg, #0f1216 0%, #142633 50%, #0f1216 100%);
+      background-size: 200% 200%;
+      animation: gradientMove 8s ease-in-out infinite;
+    }
+    /* Floating polygon shapes */
+    @keyframes float {
+      0% { transform: translateY(0px);}
+      50% { transform: translateY(-20px);}
+      100% { transform: translateY(0px);}
+    }
+    .float {
+      animation: float 6s ease-in-out infinite;
+    }
+    /* Button pulse on hover */
+    .glow:hover {
+      box-shadow: 0 0 16px 4px #30e2ff88, 0 2px 8px #000a;
+      filter: brightness(1.1);
+      transform: scale(1.03);
+    }
+    /* Large section number fade-in */
+    .section-num {
+      animation: fadeInNum 1.2s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes fadeInNum {
+      from { opacity: 0; transform: translateY(50px);}
+      to { opacity: .13; transform: translateY(0);}
+    }
+    /* SVG gradient animation */
+    .svg-gradient {
+      animation: hueRotate 12s linear infinite;
+    }
+    @keyframes hueRotate {
+      0% { filter: hue-rotate(0deg);}
+      100% { filter: hue-rotate(360deg);}
+    }
+  

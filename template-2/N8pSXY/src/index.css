@@ -1,0 +1,14 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+      .display-card::before { pointer-events: none; }
+    

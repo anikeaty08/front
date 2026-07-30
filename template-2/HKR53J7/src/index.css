@@ -1,0 +1,229 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body, html {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #0f0f0f;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Manrope', sans-serif !important;
+            font-weight: 200 !important;
+            letter-spacing: -0.03em !important;
+        }
+        .hero-section {
+            background: #181025;
+            position: relative;
+            overflow: hidden;
+        }
+        canvas#neuro {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: .95;
+            z-index: 0;
+        }
+        .glass-effect {
+            backdrop-filter: blur(14px) brightness(0.91);
+            -webkit-backdrop-filter: blur(14px) brightness(0.91);
+        }
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        .floating-delay {
+            animation: float 6s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+        .fade-in-delay-1 {
+            animation-delay: 0.2s;
+        }
+        .fade-in-delay-2 {
+            animation-delay: 0.4s;
+        }
+        .fade-in-delay-3 {
+            animation-delay: 0.6s;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 25%, #2563EB 50%, #8B5CF6 75%, #A855F7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            filter: brightness(1.1) contrast(1.05);
+            position: relative;
+        }
+        
+        .gradient-text::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 25%, #2563EB 50%, #8B5CF6 75%, #A855F7 100%);
+            opacity: 0.15;
+            filter: blur(20px);
+            z-index: -1;
+            transform: scale(1.1);
+        }
+        
+        .shiny-text {
+            color: rgba(255, 255, 255, 0.85);
+            background: linear-gradient(
+                120deg,
+                rgba(255, 255, 255, 0) 40%,
+                rgba(255, 255, 255, 0.95) 50%,
+                rgba(255, 255, 255, 0) 60%
+            );
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine var(--duration, 3s) linear infinite;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            letter-spacing: -0.025em;
+        }
+
+        @keyframes shine {
+            0% { background-position: 100%; }
+            100% { background-position: -100%; }
+        }
+
+        .glass-button {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 14px 28px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-button:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 
+                0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .glass-button:active {
+            transform: translateY(0);
+        }
+
+        .glass-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transition: left 0.5s;
+        }
+
+        .glass-button:hover::before {
+            left: 100%;
+        }
+
+        .nav-glass {
+            background: rgba(24, 16, 37, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 
+                0 4px 6px -1px rgba(0, 0, 0, 0.25),
+                0 2px 4px -1px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, #8B5CF6, #3B82F6);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .logo-glow {
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+    
+
+
+      /* Custom font utilities */
+      .font-manrope { font-family: 'Manrope', sans-serif !important; }
+    
+
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+
+
+      /* Custom font utilities */
+      .font-manrope { font-family: 'Manrope', sans-serif !important; }
+    
+
+
+      /* Custom font utilities */
+      .font-manrope { font-family: 'Manrope', sans-serif !important; }
+    
+
+
+      /* Custom font utilities */
+      .font-manrope { font-family: 'Manrope', sans-serif !important; }
+    
+
+
+      /* Custom font utilities */
+      .font-manrope { font-family: 'Manrope', sans-serif !important; }
+    

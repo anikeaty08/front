@@ -1,0 +1,67 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body { font-family: 'Inter', sans-serif; background: #16161A; }
+    .card-container { opacity: 0; transform: scale(0.97); animation: fadeInScale 0.7s cubic-bezier(.46,.03,.52,.96) forwards;}
+    @keyframes fadeInScale { 0% { opacity: 0; transform: scale(0.97);} 100% { opacity: 1; transform: scale(1);} }
+    .cell { animation: fadeUpCell 0.7s cubic-bezier(.64,.09,.08,1) forwards; opacity: 0; transform: translateY(30px);}
+    .cell-1 { animation-delay: 0.2s;}
+    .cell-2 { animation-delay: 0.35s;}
+    .cell-3 { animation-delay: 0.5s;}
+    .cell-4 { animation-delay: 0.65s;}
+    @keyframes fadeUpCell { 0% { opacity:0; transform: translateY(30px);} 100% {opacity:1; transform:translateY(0);} }
+    .progress-dot { transition: background 0.3s; }
+    .subtle-outline { outline: 1.5px solid rgba(100,112,140,0.10);}
+    .subtle-outline-inner { border-color: rgba(120,130,150,0.09);}
+    /* --- Glowing Inner Border --- */
+    @property --rotation-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+    .glow-card {
+      position: relative;
+      border-radius: 1rem;
+      overflow: visible;
+    }
+    .glow-card::before {
+      content: '';
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      border-radius: 1rem;
+      pointer-events: none;
+      box-shadow: 0 0 32px 12px rgba(102,153,0,0.18),
+                  0 0 48px 16px rgba(51,153,204,0.12),
+                  0 0 0 2px rgba(204,238,102,0.08) inset;
+      /* For conic-gradient border inner glow */
+      background: conic-gradient(
+        from var(--rotation-angle),
+        #669900, #99cc33, #ccee66, 
+        #006699, #3399cc, #990066, #cc3399, 
+        #ff6600, #ff9900, #ffcc00, #669900
+      );
+      filter: blur(20px);
+      opacity: 0.44;
+      animation: rotate 4s linear infinite;
+      mix-blend-mode: lighten;
+    }
+    @keyframes rotate {
+      to { --rotation-angle: 360deg;}
+    }
+    .glow-card > .main-content {
+      position: relative;
+      z-index: 2;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+  

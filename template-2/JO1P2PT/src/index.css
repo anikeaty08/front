@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+
+#shader-background {
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+z-index: 0;
+pointer-events: none;
+}
+.tip-pill {
+opacity: 0;
+transform: translateY(50px) scale(0.8);
+animation: fadeInUp 0.8s ease-out forwards;
+}
+@keyframes fadeInUp {
+to {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+}
+

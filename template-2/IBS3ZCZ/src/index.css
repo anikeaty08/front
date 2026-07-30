@@ -1,0 +1,23 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .main-highlight, .main-stroke, .sub-highlight, .sub-stroke {
+      transition: left 0.32s cubic-bezier(.65,1.59,.26,1), width 0.32s cubic-bezier(.65,1.59,.26,1), background 0.18s, border-color 0.18s, opacity 0.18s;
+    }
+    .fade-slide {
+      transition: opacity 0.2s, transform 0.33s;
+      will-change: opacity, transform;
+    }
+    .z-5 { z-index: 5;}
+    .z-6 { z-index: 6;}
+    .z-7 { z-index: 7;}
+  

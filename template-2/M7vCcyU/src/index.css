@@ -1,0 +1,22 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    :root {
+      --c1: 18,113,255;
+      --c2: 221,74,255;
+      --c3: 100,220,255;
+      --c4: 200,50,50;
+      --c5: 180,180,50;
+      --cchip: #d3cfcf;
+      --card-radius: 24px;
+    }
+  

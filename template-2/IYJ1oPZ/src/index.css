@@ -1,0 +1,16 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    html, body { height: 100%; margin: 0; background: hsl(256, 18%, 17%); display: flex; justify-content: center; align-items: center; }
+    .animation-container { position: relative; overflow: hidden; }
+    canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  

@@ -1,0 +1,204 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f5f5f7;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .iphone-frame {
+      position: relative;
+      width: 375px;
+      height: 812px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 54px;
+      padding: 12px;
+      box-shadow: 0 50px 100px -20px rgba(0,0,0,0.3), 
+                  0 30px 60px -30px rgba(0,0,0,0.5),
+                  inset 0 -2px 6px 0 rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+    .iphone-screen {
+      width: 100%;
+      height: 100%;
+      background: white;
+      border-radius: 44px;
+      overflow: hidden;
+      position: relative;
+    }
+    .notch {
+      position: absolute;
+      width: 150px;
+      height: 30px;
+      background: #1a1a1a;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
+      z-index: 20;
+    }
+    .home-indicator {
+      position: absolute;
+      width: 134px;
+      height: 5px;
+      background: #1a1a1a;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 100px;
+      z-index: 20;
+    }
+    .screen-content {
+      height: 100%;
+      overflow-y: auto;
+      padding-bottom: 80px;
+    }
+    
+    /* Toggle switch styling */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 28px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #e5e7eb;
+      transition: .4s;
+      border-radius: 34px;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .toggle-slider {
+      background-color: #3b82f6;
+    }
+    input:checked + .toggle-slider:before {
+      transform: translateX(22px);
+    }
+    
+    /* Circular thermostat styling */
+    .thermostat-dial {
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+      position: relative;
+      margin: 0 auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1), inset 0 -2px 6px rgba(255,255,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .thermostat-track {
+      position: absolute;
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 135deg,
+        #3b82f6 0%,
+        #60a5fa 5%,
+        #93c5fd 10%,
+        #bfdbfe 15%,
+        transparent 15%,
+        transparent 100%
+      );
+    }
+    .thermostat-inner {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .thermostat-knob {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      border: 2px solid #3b82f6;
+      z-index: 3;
+    }
+    
+    /* Temperature history chart */
+    .temp-chart {
+      width: 100%;
+      height: 120px;
+      position: relative;
+    }
+    .temp-chart-bg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(to top, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.01));
+      border-radius: 8px;
+    }
+    .temp-chart-line {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: rgba(59, 130, 246, 0.5);
+    }
+    .temp-point {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #3b82f6;
+      bottom: 0;
+      transform: translate(-50%, -50%);
+    }
+    .temp-label {
+      position: absolute;
+      font-size: 10px;
+      color: #6b7280;
+      bottom: 0;
+      transform: translateX(-50%);
+    }
+  

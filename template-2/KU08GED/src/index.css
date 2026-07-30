@@ -1,0 +1,123 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    html,body{font-family:'Inter',sans-serif;}
+    .font-satoshi-semibold {
+      font-family: 'Satoshi', 'Inter', sans-serif;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+    }
+    .spotlight-bg {
+      background: radial-gradient(ellipse at 50% 40%, rgba(120,80,255,0.30) 0%, rgba(20,20,40,0.90) 70%);
+    }
+    .card-glass {
+      background: linear-gradient(135deg, rgba(255,255,255,0.17) 0%, rgba(120,80,255,0.13) 100%);
+      backdrop-filter: blur(18px) saturate(140%);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 8px 32px 0 rgba(40,30,100,0.18), 0 2px 8px 0 rgba(80,80,120,0.10);
+      transition:
+        transform 0.18s cubic-bezier(.22,1,.36,1),
+        box-shadow 0.18s cubic-bezier(.22,1,.36,1);
+      will-change: transform;
+      outline: none;
+    }
+    .card-glass:focus-visible {
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.38), 0 8px 32px 0 rgba(40,30,100,0.18), 0 2px 8px 0 rgba(80,80,120,0.10);
+    }
+    .glow {
+      box-shadow: 0 0 36px 8px #a684fa88,0 2px 8px 0 #7c3aed44;
+    }
+    .opacity-0 { opacity: 0; }
+    .blur-md { filter: blur(16px);}
+    .translate-y-8 { transform: translateY(2rem);}
+    .animate-in {
+      opacity: 1 !important;
+      filter: blur(0) !important;
+      transform: none !important;
+      transition: all .9s cubic-bezier(.4,0,.2,1);
+    }
+    @property --gradient-angle {
+      syntax: "<angle>";
+      initial-value: 0deg;
+      inherits: false;
+    }
+    .shiny-cta {
+      --gradient-angle: 0deg;
+      --gradient-angle-offset: 0deg;
+      --gradient-percent: 20%;
+      --gradient-shine: #8484ff;
+      position: relative;
+      overflow: hidden;
+      border-radius: 9999px;
+      padding: 1.25rem 2.5rem;
+      font-size: 1.125rem;
+      line-height: 1.2;
+      font-weight: 500;
+      color: #fff;
+      background: linear-gradient(#000,#000) padding-box,
+        conic-gradient(
+          from calc(var(--gradient-angle)),
+          transparent 0%,
+          #6366f1 5%,
+          #a78bfa 15%,
+          #6366f1 30%,
+          transparent 40%,
+          transparent 100%
+        ) border-box;
+      border: 2px solid transparent;
+      box-shadow: inset 0 0 0 1px #1a1818;
+      outline: none;
+      transition: --gradient-angle-offset 800ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s;
+      cursor: pointer;
+      isolation: isolate;
+      z-index: 0;
+      animation: border-spin 2.5s linear infinite;
+    }
+    @keyframes border-spin {
+      to { --gradient-angle: 360deg; }
+    }
+    .shiny-cta:active { transform: translateY(1px);}
+    .shiny-cta::before {
+      content: '';
+      pointer-events: none;
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      width: calc(100% - 6px);
+      height: calc(100% - 6px);
+      background: radial-gradient(circle at 2px 2px, white 0.5px, transparent 0) padding-box;
+      background-size: 4px 4px;
+      background-repeat: space;
+      mask-image: conic-gradient(from calc(var(--gradient-angle) + 45deg), black, transparent 10% 90%, black);
+      border-radius: inherit;
+      opacity: 0.4;
+    }
+    .shiny-cta::after {
+      content: '';
+      pointer-events: none;
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      width: 100%; aspect-ratio: 1;
+      background: linear-gradient(-50deg, transparent, #6366f1, transparent);
+      mask-image: radial-gradient(circle at bottom, transparent 40%, black);
+      opacity: 0.6;
+      animation: shimmer 4s linear infinite;
+      animation-play-state: running;
+    }
+    @keyframes shimmer {
+      to { transform: translate(-50%, -50%) rotate(360deg);}
+    }
+    #nav-anim, #cards-anim, #hero-anim { opacity: 0; filter: blur(16px); transform: translateY(2rem);}
+  

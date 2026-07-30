@@ -1,0 +1,29 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom right, #0f172a, #1e293b);
+      min-height: 100vh;
+    }
+    .hero-gradient {
+      background: linear-gradient(120deg, rgba(56, 189, 248, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
+    }
+    .glass-card {
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .btn-gradient {
+      background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+    }
+  

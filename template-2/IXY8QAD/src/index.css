@@ -1,0 +1,30 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body { font-family: system-ui, -apple-system, sans-serif; }
+        .heading-font { font-family: 'Geist', system-ui, -apple-system, sans-serif; font-weight: 500; letter-spacing: -0.025em; }
+        #particles-js { position: absolute; width: 100%; height: 100%; top: 0; left: 0; }
+        .beautiful-shadow { box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06), 0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 100px 80px rgba(0, 0, 0, 0.12); }
+        
+        .step { transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .step.active { transform: translateX(0) scale(1); filter: blur(0px); opacity: 1; }
+        .step.prev { transform: translateX(-100%) scale(0.95); filter: blur(3px); opacity: 0; }
+        .step.next { transform: translateX(100%) scale(0.95); filter: blur(3px); opacity: 0; }
+        
+        .progress-bar { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in { animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    

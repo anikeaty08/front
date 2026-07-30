@@ -1,0 +1,124 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+    body { width: 100vw; height: 100vh; min-height: 100vh; min-width: 100vw; position: relative; }
+    #shader-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: block; pointer-events: none; z-index: 0; }
+    .scroll-phrase-wrapper {
+      position: relative;
+      display: inline-block;
+      height: 1.2em;
+      min-width: 19ch;
+      width: max-content;
+      vertical-align: baseline;
+      line-height: 1.1;
+      overflow: hidden;
+    }
+    .scroll-phrase {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      white-space: nowrap;
+      transition: transform 0.5s cubic-bezier(.5,1.5,.5,1), opacity 0.5s, filter 0.5s;
+      will-change: transform, opacity, filter;
+      font-weight: 800;
+      font-size: inherit;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: 0.01em;
+      filter: none !important;
+      text-shadow: none !important;
+    }
+    .scroll-phrase.next { top: 100%; }
+    .scroll-phrase.animate-up {
+      transform: translateY(-100%);
+      opacity: 0;
+      filter: blur(6px);
+    }
+    .scroll-phrase.animate-in {
+      transform: translateY(0%);
+      opacity: 1;
+      filter: blur(0px);
+    }
+    .scroll-phrase.animate-from-below {
+      transform: translateY(100%);
+      opacity: 0;
+      filter: blur(6px);
+    }
+    .phrase-gradient-0 {
+      background-image: linear-gradient(90deg, #06b6d4, #3b82f6);
+    }
+    .phrase-gradient-1 {
+      background-image: linear-gradient(90deg, #6366f1, #7c3aed);
+    }
+    .phrase-gradient-2 {
+      background-image: linear-gradient(90deg, #22d3ee, #f472b6);
+    }
+    .phrase-gradient-3 {
+      background-image: linear-gradient(90deg, #f59e42, #ef4444);
+    }
+    .phrase-gradient-4 {
+      background-image: linear-gradient(90deg, #34d399, #facc15);
+    }
+    .title-font { font-family: 'Quicksand', sans-serif !important; }
+    .secondary-font { font-family: 'Poppins', sans-serif !important; }
+    .btn-hero {
+      transition: 
+        transform 0.18s cubic-bezier(.4,1.4,.5,1.1),
+        box-shadow 0.22s cubic-bezier(.4,1.4,.5,1.1),
+        background 0.22s cubic-bezier(.4,1.4,.5,1.1),
+        color 0.17s cubic-bezier(.4,1.4,.5,1.1);
+      will-change: transform, box-shadow, background, color;
+    }
+    .btn-hero:hover {
+      transform: scale(1.045) translateY(-2px);
+      box-shadow: 0 8px 36px 0 rgba(99,102,241,0.25), 0 1.5px 6px 0 rgba(124,58,237,0.10);
+    }
+    .btn-outline-hero {
+      transition: 
+        transform 0.18s cubic-bezier(.4,1.4,.5,1.1),
+        box-shadow 0.22s cubic-bezier(.4,1.4,.5,1.1),
+        background 0.22s cubic-bezier(.4,1.4,.5,1.1),
+        color 0.17s cubic-bezier(.4,1.4,.5,1.1),
+        border-color 0.18s cubic-bezier(.4,1.4,.5,1.1);
+      will-change: transform, box-shadow, background, color, border-color;
+    }
+    .btn-outline-hero:hover {
+      transform: scale(1.045) translateY(-2px);
+      background: linear-gradient(90deg,rgba(91,33,182,0.08) 0%,rgba(99,102,241,0.10) 100%);
+      border-color: #818cf8;
+      color: #fff;
+      box-shadow: 0 8px 28px 0 rgba(99,102,241,0.12), 0 1.5px 6px 0 rgba(124,58,237,0.10);
+    }
+    /* Sidebar hover effect */
+    .sidebar-btn {
+      transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+    }
+    .sidebar-btn:hover {
+      
+      transform: scale(1.10) translateY(-2px);
+      box-shadow: 0 4px 20px 0 rgba(99,102,241,0.15);
+    }
+    .sidebar-avatar:hover {
+      transform: scale(1.08) rotate(-3deg);
+      box-shadow: 0 4px 18px 0 rgba(16,185,129,0.14);
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+  
+
+
+      /* Custom font utilities */
+      .font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+      .font-manrope { font-family: 'Manrope', sans-serif !important; }
+      .font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+    

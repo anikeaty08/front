@@ -1,0 +1,20 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+html{scroll-behavior:smooth}
+.fade{opacity:0;transform:translateY(20px);animation:fade .8s forwards cubic-bezier(.16,1,.3,1)}
+.fade-1{animation-delay:.15s}.fade-2{animation-delay:.35s}.fade-3{animation-delay:.55s}.fade-4{animation-delay:.75s}
+@keyframes fade{to{opacity:1;transform:translateY(0)}}
+.typewrite>.wrap{border-right:.1em solid currentColor;animation:blink 1s step-end infinite}@keyframes blink{50%{border-color:transparent}}
+body::before{content:"";position:fixed;inset:0;z-index:-10;background:radial-gradient(ellipse at 30% 20%,#164B6B 0%,#15263f 60%)}
+button,a{touch-action:manipulation}
+

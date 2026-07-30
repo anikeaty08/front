@@ -1,0 +1,102 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        .font-geist { font-family: 'Geist', sans-serif !important; }
+    
+
+
+      /* Custom font utilities */
+      .font-geist { font-family: 'Geist', sans-serif !important; }
+    
+
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                filter: blur(0px);
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                filter: blur(8px);
+                transform: scale(0.95);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                filter: blur(8px);
+                transform: scale(0.95);
+            }
+            to {opacity: 1;
+                filter: blur(0px);
+                transform: scale(1);
+            }
+        }
+
+        .logo-set {
+            transition: opacity 1s ease-in-out, filter 1s ease-in-out, transform 1s ease-in-out;
+            opacity: 0;
+        }
+
+        .logo-set.active {
+            opacity: 1;
+        }
+
+        .logo-set.fade-out {
+            animation: fadeOut 1s ease-in-out forwards;
+        }
+
+        .logo-set.fade-in {
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        .logo-container {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .logo-container:nth-child(1) {
+            animation-delay: 0.4s;
+        }
+
+        .logo-container:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .logo-container:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .logo-container:nth-child(4) {
+            animation-delay: 0.7s;
+        }
+
+        .logo-container:nth-child(5) {
+            animation-delay: 0.8s;
+        }
+
+        .logo-container:nth-child(6) {
+            animation-delay: 0.9s;
+        }
+    

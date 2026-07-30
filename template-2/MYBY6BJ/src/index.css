@@ -1,0 +1,49 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #18181b 0%, #312e81 100%);
+    }
+    .animate-seq { opacity: 0; filter: blur(16px); transform: translateY(36px);}
+    .animate-seq.visible {
+      animation: fadeSlideBlurIn 1.2s cubic-bezier(.33,1,.68,1) forwards;
+    }
+    .animate-seq2 { opacity: 0; filter: blur(14px); transform: translateY(38px);}
+    .animate-seq2.visible {
+      animation: fadeSlideBlurIn 1.3s 0.15s cubic-bezier(.33,1,.68,1) forwards;
+    }
+    .animate-seq3 { opacity: 0; filter: blur(10px); transform: translateY(33px);}
+    .animate-seq3.visible {
+      animation: fadeSlideBlurIn 1.3s 0.30s cubic-bezier(.33,1,.68,1) forwards;
+    }
+    .animate-seq4 { opacity: 0; filter: blur(8px); transform: translateY(28px);}
+    .animate-seq4.visible {
+      animation: fadeSlideBlurIn 1.1s 0.5s cubic-bezier(.33,1,.68,1) forwards;
+    }
+    @keyframes fadeSlideBlurIn {
+      to { opacity: 1; filter: blur(0); transform: translateY(0);}
+    }
+  
+
+
+      /* Custom font utilities */
+      .font-poppins { font-family: 'Poppins', sans-serif !important; }
+    
+
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+

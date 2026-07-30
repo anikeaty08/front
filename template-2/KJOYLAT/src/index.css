@@ -1,0 +1,15 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+.font-arabic { font-family: 'Noto Sans Arabic', 'Inter', sans-serif; }
+.font-en { font-family: 'Inter', sans-serif; }
+

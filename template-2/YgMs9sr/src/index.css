@@ -1,0 +1,15 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .sidebar-transition { transition: width 0.2s ease-out; }
+    body { overflow: hidden; }
+  

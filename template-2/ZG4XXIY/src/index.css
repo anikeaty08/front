@@ -1,0 +1,34 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body { font-family: 'Geist', sans-serif; }
+        .gradient-border {
+            background: linear-gradient(135deg, #8B5CF6, #06B6D4, #10B981);
+            padding: 1px;
+            border-radius: 16px;
+        }
+        .gradient-border-thin {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(6, 182, 212, 0.3), rgba(16, 185, 129, 0.3));
+            padding: 1px;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #8B5CF6, #06B6D4, #10B981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #8B5CF6, #06B6D4);
+            height: 2px;
+            border-radius: 1px;
+        }
+    

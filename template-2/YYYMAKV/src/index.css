@@ -1,0 +1,34 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body { font-family: 'Inter', sans-serif; }
+    #particles-js {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      width: 100vw;
+      height: 100vh;
+    }
+    .circle-chart {
+      transform: rotate(-90deg);
+      transform-origin: center;
+    }
+    @keyframes progressAnimation {
+      0% { stroke-dashoffset: 565.48; }
+      100% { stroke-dashoffset: var(--dash-offset); }
+    }
+    .progress-circle {
+      stroke-dasharray: 565.48; /* 2PI×r, where r=90 */
+      stroke-dashoffset: var(--dash-offset);
+      animation: progressAnimation 1.5s ease-out forwards;
+    }
+  

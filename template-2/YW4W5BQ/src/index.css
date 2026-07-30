@@ -1,0 +1,29 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+html, body { height: 100%; margin: 0; }
+body { font-family: 'Inter', sans-serif; background: #0f172a; }
+#gl-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: block; z-index: 0; }
+.overlay { z-index: 1; pointer-events: none; background: linear-gradient(transparent 60%, rgba(15, 23, 42, 0.7) 100%); position: fixed; inset: 0; width: 100vw; height: 100vh; }
+.font-display { font-family: 'Inter', sans-serif; }
+@keyframes enter { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.animate-enter { opacity: 0; animation: enter 0.7s ease-out forwards; }
+.hover-tilt:hover { transform: translateY(-6px) rotateX(0.5deg) rotateY(-0.6deg); }
+.glass-effect { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
+
+
+    body { font-family: 'Inter', sans-serif; }
+    .animate-enter { opacity: 0; animation: enter 0.7s ease-out forwards; }
+    @keyframes enter { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .glass-effect { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  

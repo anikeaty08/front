@@ -1,0 +1,439 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+      /* Floating orbs animation */
+      @keyframes floating-orb {
+        0%, 100% { 
+          transform: translateY(0px) scale(1);
+        }
+        50% { 
+          transform: translateY(-20px) scale(1.05);
+        }
+      }
+      
+      .floating-orb {
+        animation: floating-orb 8s ease-in-out infinite;
+      }
+
+      /* Floating particles */
+      @keyframes floating-particle {
+        0%, 100% { 
+          transform: translateY(0px) translateX(0px) rotate(0deg);
+          opacity: 0.3;
+        }
+        25% { 
+          transform: translateY(-10px) translateX(5px) rotate(90deg);
+          opacity: 0.6;
+        }
+        50% { 
+          transform: translateY(-20px) translateX(-5px) rotate(180deg);
+          opacity: 1;
+        }
+        75% { 
+          transform: translateY(-10px) translateX(-10px) rotate(270deg);
+          opacity: 0.6;
+        }
+      }
+      
+      .floating-particle {
+        animation: floating-particle 15s ease-in-out infinite;
+      }
+
+      /* Enhanced shine effect */
+      @keyframes animate-shine {
+        0% { 
+          transform: translateX(-100%) skewX(-12deg);
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% { 
+          transform: translateX(200%) skewX(-12deg);
+          opacity: 0;
+        }
+      }
+
+      /* Slow spin for album art when playing */
+      @keyframes animate-slow-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      
+      .group.is-playing .animate-slow-spin {
+        animation: animate-slow-spin 20s linear infinite;
+      }
+
+      /* Pulse glow effect */
+      @keyframes animate-pulse-glow {
+        0%, 100% { 
+          opacity: 0.3;
+          transform: scale(1);
+        }
+        50% { 
+          opacity: 0.6;
+          transform: scale(1.02);
+        }
+      }
+
+      /* Rainbow pulse for play button and rings */
+      @keyframes animate-pulse-rainbow {
+        0%, 100% { 
+          box-shadow: 0 0 0 0 rgba(99,102,241,0.4);
+        }
+        25% { 
+          box-shadow: 0 0 0 4px rgba(168,85,247,0.3);
+        }
+        50% { 
+          box-shadow: 0 0 0 8px rgba(236,72,153,0.2);
+        }
+        75% { 
+          box-shadow: 0 0 0 4px rgba(245,101,101,0.3);
+        }
+      }
+      
+      .animate-pulse-rainbow {
+        animation: animate-pulse-rainbow 2s infinite;
+      }
+
+      /* Ping rainbow effect */
+      @keyframes animate-ping-rainbow {
+        0% { 
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(99,102,241,0.7);
+        }
+        25% {
+          box-shadow: 0 0 0 4px rgba(168,85,247,0.5);
+        }
+        50% {
+          box-shadow: 0 0 0 8px rgba(236,72,153,0.3);
+        }
+        75% { 
+          transform: scale(1.05);
+          box-shadow: 0 0 0 12px rgba(245,101,101,0.1);
+        }
+        100% {
+          transform: scale(1);
+          box-shadow: 0 0 0 16px rgba(99,102,241,0);
+        }
+      }
+      
+      .animate-ping-rainbow {
+        animation: animate-ping-rainbow 1.5s infinite;
+      }
+
+      /* Animated border glow */
+      .border-glow {
+        background: linear-gradient(90deg, 
+          transparent, 
+          rgba(99,102,241,0.5), 
+          rgba(168,85,247,0.5), 
+          rgba(236,72,153,0.5), 
+          transparent
+        );
+        background-size: 200% 100%;
+        animation: border-flow 3s linear infinite;
+      }
+      
+      @keyframes border-flow {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 200% 50%; }
+      }
+
+      /* Wave dance animation for waveform bars */
+      @keyframes animate-wave-dance {
+        0%, 100% { 
+          transform: scaleY(1) scaleX(1);
+          filter: brightness(1);
+        }
+        25% { 
+          transform: scaleY(1.2) scaleX(1.1);
+          filter: brightness(1.2);
+        }
+        50% { 
+          transform: scaleY(1.4) scaleX(1.05);
+          filter: brightness(1.4);
+        }
+        75% { 
+          transform: scaleY(1.1) scaleX(1.15);
+          filter: brightness(1.1);
+        }
+      }
+      
+      .animate-wave-dance {
+        animation: animate-wave-dance 0.8s ease-in-out infinite;
+      }
+
+      /* Heartbeat animation for like button */
+      @keyframes animate-heartbeat {
+        0%, 100% { 
+          transform: scale(1);
+        }
+        25% { 
+          transform: scale(1.1);
+        }
+        50% { 
+          transform: scale(1.2);
+        }
+        75% { 
+          transform: scale(1.05);
+        }
+      }
+      
+      .animate-heartbeat {
+        animation: animate-heartbeat 0.6s ease-in-out;
+      }
+
+      /* Wiggle animation */
+      @keyframes animate-wiggle {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(5deg); }
+        75% { transform: rotate(-5deg); }
+      }
+      
+      .animate-wiggle {
+        animation: animate-wiggle 0.5s ease-in-out;
+      }
+
+      /* Shake animation */
+      @keyframes animate-shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+        20%, 40%, 60%, 80% { transform: translateX(2px); }
+      }
+      
+      .animate-shake {
+        animation: animate-shake 0.6s ease-in-out;
+      }
+
+      /* Float animation for badges */
+      @keyframes animate-float {
+        0%, 100% { 
+          transform: translateY(0px);
+        }
+        50% { 
+          transform: translateY(-5px);
+        }
+      }
+      
+      .animate-float {
+        animation: animate-float 3s ease-in-out infinite;
+      }
+
+      /* Fast pulse for live indicator */
+      @keyframes animate-pulse-fast {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+      }
+      
+      .animate-pulse-fast {
+        animation: animate-pulse-fast 1s ease-in-out infinite;
+      }
+
+      /* Slow pulse effects */
+      .animate-pulse-slow {
+        animation: pulse 4s ease-in-out infinite;
+      }
+      
+      .animate-ping-slow {
+        animation: ping 3s infinite;
+      }
+
+      /* Digital flicker for time displays */
+      @keyframes animate-digital-flicker {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.8; }
+        55% { opacity: 1; }
+        57% { opacity: 0.9; }
+      }
+      
+      .animate-digital-flicker {
+        animation: animate-digital-flicker 2s infinite;
+      }
+
+      /* Flicker animation */
+      @keyframes animate-flicker {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+      
+      .animate-flicker {
+        animation: animate-flicker 3s ease-in-out infinite;
+      }
+
+      /* Progress bar glow */
+      @keyframes animate-progress-glow {
+        0%, 100% { 
+          box-shadow: 0 0 5px rgba(99,102,241,0.5);
+        }
+        50% { 
+          box-shadow: 0 0 15px rgba(168,85,247,0.7), 0 0 25px rgba(236,72,153,0.3);
+        }
+      }
+      
+      .animate-progress-glow {
+        animation: animate-progress-glow 2s ease-in-out infinite;
+      }
+
+      /* Pulse button effect */
+      @keyframes animate-pulse-button {
+        0%, 100% { 
+          transform: scale(1);
+          box-shadow: 0 0 20px rgba(99,102,241,0.3);
+        }
+        50% { 
+          transform: scale(1.02);
+          box-shadow: 0 0 30px rgba(168,85,247,0.5);
+        }
+      }
+      
+      .animate-pulse-button {
+        animation: animate-pulse-button 2s ease-in-out infinite;
+      }
+
+      /* Bounce subtle */
+      @keyframes animate-bounce-subtle {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-2px); }
+      }
+      
+      .animate-bounce-subtle {
+        animation: animate-bounce-subtle 2s ease-in-out infinite;
+      }
+
+      /* Slide animations */
+      @keyframes animate-slide-up {
+        0% { 
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% { 
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .animate-slide-up {
+        animation: animate-slide-up 0.6s ease-out forwards;
+      }
+
+      @keyframes animate-slide-in {
+        0% { 
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        100% { 
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      .animate-slide-in {
+        animation: animate-slide-in 0.4s ease-out forwards;
+      }
+
+      @keyframes animate-fade-in {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+      
+      .animate-fade-in {
+        animation: animate-fade-in 0.8s ease-out forwards;
+      }
+
+      /* Tag pop animation */
+      @keyframes animate-tag-pop {
+        0% { 
+          opacity: 0;
+          transform: scale(0.8) translateY(10px);
+        }
+        50% {
+          transform: scale(1.05) translateY(0);
+        }
+        100% { 
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+      
+      .animate-tag-pop {
+        animation: animate-tag-pop 0.5s ease-out forwards;
+      }
+
+      /* Glow text effect */
+      .glow-text {
+        text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(99,102,241,0.2);
+      }
+
+      /* Number counting effect */
+      @keyframes animate-number-count {
+        0% { 
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% { 
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .animate-number-count {
+        animation: animate-number-count 0.8s ease-out forwards;
+      }
+
+      /* Glow animation for quality badges */
+      @keyframes animate-glow {
+        0%, 100% { 
+          box-shadow: inset 0 0 5px rgba(255,255,255,0.1);
+        }
+        50% { 
+          box-shadow: inset 0 0 10px rgba(255,255,255,0.2), 0 0 10px rgba(255,255,255,0.1);
+        }
+      }
+      
+      .animate-glow {
+        animation: animate-glow 3s ease-in-out infinite;
+      }
+
+      /* Custom scrollbar styles */
+      .flex-1::-webkit-scrollbar {
+        width: 6px;
+      }
+      
+      .flex-1::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 3px;
+      }
+      
+      .flex-1::-webkit-scrollbar-thumb {
+        background: linear-gradient(to bottom, rgba(99,102,241,0.5), rgba(168,85,247,0.5));
+        border-radius: 3px;
+      }
+      
+      .flex-1::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(to bottom, rgba(99,102,241,0.7), rgba(168,85,247,0.7));
+      }
+
+      /* Enhanced hover effects */
+      .group/track:hover {
+        transform: translateY(-2px);
+      }
+
+      /* Responsive animations */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    

@@ -1,0 +1,29 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .linear-gradient {
+      background: linear-gradient(90deg, #6366F1 0%, #06B6D4 100%);
+    }
+    .linear-gradient:hover {
+      background: linear-gradient(90deg, #8B5CF6 0%, #0EA5E9 100%);
+    }
+    .step-completed {
+      background: #6366F1;
+    }
+    .step-current {
+      background: #06B6D4;
+      box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.25);
+    }
+    .step-upcoming {
+      background: #334155;
+    }
+  

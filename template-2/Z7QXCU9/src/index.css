@@ -1,0 +1,42 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #3b82f6 100%);
+    }
+    .ring-glow {
+      box-shadow: 0 0 0 1.5px rgba(59,130,246,0.09), 0 12px 48px 0 rgba(59,130,246,0.07);
+    }
+    .shine::before {
+      content: "";
+      position: absolute;
+      top: -30%;
+      left: -30%;
+      width: 160%;
+      height: 160%;
+      background: linear-gradient(120deg, rgba(59,130,246,0.08) 0%, rgba(255,255,255,0.10) 100%);
+      filter: blur(36px);
+      z-index: 0;
+      border-radius: 32px;
+      pointer-events: none;
+    }
+    .pulse-animation {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+    .gradient-bar {
+      background: linear-gradient(90deg, #2563eb 0%, #60a5fa 50%, #a5b4fc 100%);
+    }
+  

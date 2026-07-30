@@ -1,0 +1,46 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .heading {
+            font-family: 'Manrope', sans-serif;
+        }
+        
+        /* Tab Menu Styles */
+        .tab-menu {
+            position: relative;
+        }
+        
+        .tab-indicator {
+            position: absolute;
+            bottom: 0;
+            height: 2px;
+            background-color: #3b82f6; /* Blue-500 */
+            transition: all 0.3s ease;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    

@@ -1,0 +1,17 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; }
+    ::selection { background: #fab235; color: #000; }
+    .carousel::-webkit-scrollbar { display: none; }
+  

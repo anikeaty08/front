@@ -1,0 +1,71 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+/* Custom Styles for nuances not covered by default Tailwind utility classes */
+:root {
+--font-serif: 'Instrument Serif', serif;
+--font-sans: 'Inter', sans-serif;
+--color-cyan: #00E5E5;
+}
+body {
+font-family: var(--font-sans);
+background-color: #F7F7F8;
+background-image: radial-gradient(#E1E1E3 1px, transparent 1px);
+background-size: 24px 24px;
+}
+h1, h2, h3, h4, h5, h6 {
+font-family: var(--font-serif);
+}
+/* Smooth Blur Reveal Animation */
+@keyframes blurIn {
+0% {
+opacity: 0;
+filter: blur(12px);
+transform: translateY(10px);
+}
+100% {
+opacity: 1;
+filter: blur(0);
+transform: translateY(0);
+}
+}
+.animate-blur-in {
+animation: blurIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+opacity: 0; /* Start hidden */
+}
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-500 { animation-delay: 0.5s; }
+/* Custom Scrollbar for the internal card */
+.no-scrollbar::-webkit-scrollbar {
+display: none;
+}
+.no-scrollbar {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+/* Gradient Text */
+.text-gradient {
+background: linear-gradient(135deg, #000000 60%, #52525b 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+/* Toggle Switch Custom */
+.toggle-checkbox:checked {
+right: 0;
+border-color: #000;
+}
+.toggle-checkbox:checked + .toggle-label {
+background-color: #000;
+}
+

@@ -1,0 +1,25 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    :root { --blue:#2563EB; }
+    html{scroll-behavior:smooth;}
+    [data-ripple]{position:relative;overflow:hidden;}
+    [data-ripple]::after{content:'';position:absolute;inset:0;border-radius:inherit;transform:scale(0);opacity:.15;background:var(--blue);transition:transform .4s,opacity .8s;}
+    [data-ripple]:active::after{transform:scale(1);opacity:0;transition:0s;}
+
+    /* Section dividers */
+    .divider-bottom{position:absolute;bottom:-1px;left:0;width:100%;height:80px;}
+  
+
+
+      body { font-family: 'Inter', sans-serif; }
+    

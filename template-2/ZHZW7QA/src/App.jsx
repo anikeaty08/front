@@ -1,0 +1,597 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      
+    lucide.createIcons();
+
+    // Ensure consistent glass effect across supported browsers (minimal, non-destructive)
+    document.querySelectorAll('.backdrop-blur-xl').forEach(el => {
+      try {
+        el.style.webkitBackdropFilter = 'saturate(160%) blur(18px)';
+        el.style.backdropFilter = 'saturate(160%) blur(18px)';
+      } catch (e) {}
+    });
+
+    const screens = {
+      home: document.getElementById('screen-home'),
+      attendance: document.getElementById('screen-attendance'),
+      marks: document.getElementById('screen-marks'),
+      calendar: document.getElementById('screen-calendar'),
+      timetable: document.getElementById('screen-timetable'),
+      more: document.getElementById('screen-more'),
+    };
+
+    function showScreen(key) {
+      Object.entries(screens).forEach(([k, el]) => {
+        if (!el) return;
+        el.classList.toggle('hidden', k !== key);
+      });
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        const isActive = btn.dataset.screen === key;
+        btn.classList.toggle('active', isActive);
+        btn.classList.toggle('text-blue-300', isActive);
+        btn.classList.toggle('text-gray-400', !isActive);
+      });
+    }
+
+    // Default screen
+    showScreen('home');
+
+    // Bottom nav
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => showScreen(btn.dataset.screen));
+    });
+
+    // Quick access jumpers
+    document.querySelectorAll('[data-jump]').forEach(btn => {
+      btn.addEventListener('click', () => showScreen(btn.dataset.jump));
+    });
+
+    // Segmented controls (Home widget)
+    const segButtons = document.querySelectorAll('.seg-btn');
+    segButtons.forEach((b, idx) => {
+      if (idx === 0) {
+        b.classList.add('bg-blue-500/20','text-blue-200','border','border-blue-400/30');
+      }
+      b.addEventListener('click', () => {
+        segButtons.forEach(s => s.classList.remove('bg-blue-500/20','text-blue-200','border','border-blue-400/30'));
+        b.classList.add('bg-blue-500/20','text-blue-200','border','border-blue-400/30');
+      });
+    });
+
+    // Segmented controls (Timetable screen)
+    const ttButtons = document.querySelectorAll('.tt-seg');
+    ttButtons.forEach((b, idx) => {
+      if (idx === 0) {
+        b.classList.add('bg-blue-500/20','text-blue-200','border','border-blue-400/30');
+      }
+      b.addEventListener('click', () => {
+        ttButtons.forEach(s => s.classList.remove('bg-blue-500/20','text-blue-200','border','border-blue-400/30'));
+        b.classList.add('bg-blue-500/20','text-blue-200','border','border-blue-400/30');
+      });
+    });
+  
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      <div className="spline-container fixed top-0 w-full h-screen -z-10"><iframe frameborder="0" height="100%" id="aura-spline" src="https://my.spline.design/retrofuturismbganimation-Lb3VtL1bNaYUnirKNzn0FvaW" width="100%"></iframe></div>
+
+<div className="pointer-events-none fixed inset-0 -z-10 opacity-60">
+<div className="absolute -top-24 right-6 w-72 h-72 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-400/10 blur-3xl"></div>
+<div className="absolute bottom-0 left-10 w-80 h-80 rounded-full bg-gradient-to-br from-emerald-500/15 to-teal-400/10 blur-3xl"></div>
+</div>
+
+<div className="max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl mr-auto ml-auto pt-4 pr-4 pb-24 pl-4">
+
+<header className="sticky top-0 z-20 -mx-4 mb-4 bg-gradient-to-b from-[#0a0f1a]/80 to-transparent backdrop-blur-xl backdrop-saturate-150 px-4" style={{webkitBackdropFilter: `saturate(160%) blur(18px)`, backdropFilter: `saturate(160%) blur(18px)`}}>
+<div className="flex pt-3 pb-3 items-center justify-between">
+<div className="flex items-center gap-2">
+<div className="rounded-xl border border-white/10 bg-white/5 p-2">
+<svg className="lucide lucide-graduation-cap w-5 h-5 text-blue-300" data-lucide="graduation-cap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>
+</div>
+<div className="">
+<div className="text-xs text-gray-400 font-quicksand"></div>
+<h1 className="text-lg sm:text-xl font-semibold tracking-tight font-quicksand">Acadmania</h1>
+</div>
+</div>
+<button className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-gray-300 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/40">
+<svg className="lucide lucide-bell w-4 h-4" data-lucide="bell" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
+<span className="hidden sm:inline font-quicksand">Alerts</span>
+</button>
+</div>
+<div className="h-px w-full bg-white/10"></div>
+</header>
+
+<main className="space-y-6">
+
+<section className="space-y-4" id="ui-description">
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<h2 className="text-xl font-semibold tracking-tight font-quicksand">UI Overview</h2>
+<div className="mt-2 space-y-3 text-sm text-gray-300 font-quicksand">
+<p>- Theme: Dark, low-noise gradient background with soft colored glows. Typography leans light; headings use tighter tracking for crisp hierarchy.</p>
+<p>- Surfaces: Cards, tiles, and nav use translucent layers with blur and subtle borders to create a glass effect. Elevation reads through contrast rather than heavy shadows.</p>
+<p>- Header: Sticky, translucent bar with a compact logo block and an Alerts button. Divider below anchors content when scrolling.</p>
+<p>- Navigation (bottom): Rounded, translucent dock with six icons. Active item is tinted and labeled; inactive items are dimmed. The bar remains fixed for thumb reach.</p>
+<p>- Home screen:
+              • Greeting card shows name and a small presence indicator.
+              • Quick Access grid of four tiles; each tile has:
+                - Hover: background raises to white/10, icon tints toward blue.
+                - Active: slight compress (scale to 0.98) for press feedback.
+                - Focus: soft ring emphasizing accessibility.
+              • Events banner: gradient glass card with an “Announcement” chip; center-aligned title and helper text.
+              • Timetable widget: segmented day control (1–5) with a highlighted selection chip and an empty-state card below.
+              • Standings mini-cards: attendance and marks at-a-glance with small status chips (Good/Latest).</p>
+<p>- Attendance screen:
+              • Each subject card uses a two-line title and a right-aligned “Margin” label.
+              • Stats row shows P/A/T pills with colored outlines.
+              • Progress bar at the bottom maps percentage to a filled track (emerald for good, amber/orange for at-risk).</p>
+<p>- Marks screen:
+              • Subject cards show a Score label.
+              • Empty states display an info icon and message within a softer inner card.</p>
+<p>- Calendar screen:
+              • Top controls: previous/next chevrons flanking the month title.
+              • Event cards: date chip + title + context; holiday uses a green, positive style.</p>
+<p>- Timetable screen:
+              • Segmented day control mirrors the Home widget.
+              • Empty state: consistent helper card indicating no classes.</p>
+<p>- More screen:
+              • List rows with leading icons and trailing chevrons; subtle dividers segment items.</p>
+<p>- Motion and micro-interactions:
+              • Buttons/tiles use hover tint, active 0.98 scale, and focus rings (2px blue/40 opacity).
+              • Icons are vector and inherit color changes on hover/active states.
+              • Segmented controls toggle highlighted chip styles; only one is active at a time.
+              • Bottom nav updates active state and color in sync with visible screens.
+              • Sticky header retains translucency while content scrolls beneath.</p>
+<p>- Responsiveness:
+              • Container width grows from mobile to tablet/desktop breakpoints.
+              • Quick Access grid expands from 2 to 4 columns; text labels gracefully truncate.</p>
+<p>- Accessibility:
+              • Contrast maintained on text and chips.
+              • Focus styles consistently applied to actionable elements.
+              • Iconography paired with labels in navigation and actions.</p>
+<p>- Glass effect specifics:
+              • Translucent layers use blur and saturation to keep foreground content vivid while letting background hues bleed through softly.
+              • Borders (white/10) outline surfaces; additional saturation subtly enriches color chips and icons without harshness.</p>
+</div>
+</div>
+</section>
+
+<section className="space-y-6" id="screen-home">
+
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-center justify-between">
+<div className="">
+<p className="text-sm text-gray-400 font-quicksand">Welcome back,</p>
+<h2 className="text-2xl tracking-tight font-quicksand font-medium">Aditya Sharma</h2>
+</div>
+<div className="rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-2.5 py-1 text-emerald-300 text-xs font-quicksand">Online</div>
+</div>
+</div>
+
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-center justify-between mb-3">
+<h3 className="text-base font-semibold tracking-tight font-quicksand">Quick Access</h3>
+<svg className="lucide lucide-chevron-down w-5 h-5 text-gray-400" data-lucide="chevron-down" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+</div>
+<div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<button className="group flex items-center gap-2 rounded-xl border border-white/10 bg-gradient-to-b from-white/5 to-white/0 px-3.5 py-3 text-sm hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/40 active:scale-[0.98] transition font-quicksand" data-jump="attendance">
+<svg className="lucide lucide-check-circle w-4.5 h-4.5 text-blue-300 group-hover:text-blue-200" data-lucide="check-circle" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg>
+              Attendance
+            </button>
+<button className="group flex items-center gap-2 rounded-xl border border-white/10 bg-gradient-to-b from-white/5 to-white/0 px-3.5 py-3 text-sm hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/40 active:scale-[0.98] transition font-quicksand" data-jump="timetable">
+<svg className="lucide lucide-table w-4.5 h-4.5 text-blue-300 group-hover:text-blue-200" data-lucide="table" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v18"></path><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M3 9h18"></path><path d="M3 15h18"></path></svg>
+              Timetable
+            </button>
+<button className="group flex items-center gap-2 rounded-xl border border-white/10 bg-gradient-to-b from-white/5 to-white/0 px-3.5 py-3 text-sm hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/40 active:scale-[0.98] transition font-quicksand" data-jump="marks">
+<svg className="lucide lucide-bookmark-check w-4.5 h-4.5 text-blue-300 group-hover:text-blue-200" data-lucide="bookmark-check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"></path><path d="m9 10 2 2 4-4"></path></svg>
+              Marks
+            </button>
+<button className="group flex items-center gap-2 rounded-xl border border-white/10 bg-gradient-to-b from-white/5 to-white/0 px-3.5 py-3 text-sm hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/40 active:scale-[0.98] transition font-quicksand" data-jump="calendar">
+<svg className="lucide lucide-calendar w-4.5 h-4.5 text-blue-300 group-hover:text-blue-200" data-lucide="calendar" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M3 10h18"></path></svg>
+              Calendar
+            </button>
+</div>
+</div>
+
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 overflow-hidden">
+<div className="flex items-center justify-between px-4 pt-4">
+<h3 className="text-base font-semibold tracking-tight font-quicksand">Events</h3>
+<a className="text-sm text-blue-300 hover:text-blue-200 font-quicksand" href="#">View all</a>
+</div>
+<div className="px-4 pb-4">
+<div className="relative w-full h-40 rounded-xl overflow-hidden border border-white/10 bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-emerald-500/30">
+<div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(59,130,246,0.25)_0%,rgba(16,185,129,0.15)_40%,transparent_70%)]"></div>
+<div className="absolute inset-0 flex items-center justify-center text-center">
+<div className="">
+<div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs text-emerald-300 mb-2 font-quicksand">
+<svg className="lucide lucide-megaphone w-3.5 h-3.5" data-lucide="megaphone" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11 6a13 13 0 0 0 8.4-2.8A1 1 0 0 1 21 4v12a1 1 0 0 1-1.6.8A13 13 0 0 0 11 14H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"></path><path d="M6 14a12 12 0 0 0 2.4 7.2 2 2 0 0 0 3.2-2.4A8 8 0 0 1 10 14"></path><path d="M8 6v8"></path></svg>
+                    Announcement
+                  </div>
+<h4 className="text-xl font-semibold tracking-tight font-quicksand">HACK & BEYOND</h4>
+<p className="text-xs text-gray-300 mt-1 font-quicksand">Join the university-wide hackathon this weekend</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-center justify-between">
+<h3 className="text-base font-semibold tracking-tight font-quicksand">Timetable</h3>
+<div className="inline-flex rounded-full border border-white/10 bg-white/5 p-0.5">
+<button className="seg-btn px-3 py-1.5 text-xs rounded-full text-gray-300 hover:text-white bg-blue-500/20 text-blue-200 border border-blue-400/30 font-quicksand" data-day="1">1</button>
+<button className="seg-btn px-3 py-1.5 text-xs rounded-full text-gray-300 hover:text-white font-quicksand" data-day="2">2</button>
+<button className="seg-btn px-3 py-1.5 text-xs rounded-full text-gray-300 hover:text-white font-quicksand" data-day="3">3</button>
+<button className="seg-btn px-3 py-1.5 text-xs rounded-full text-gray-300 hover:text-white font-quicksand" data-day="4">4</button>
+<button className="seg-btn px-3 py-1.5 text-xs rounded-full text-gray-300 hover:text-white font-quicksand" data-day="5">5</button>
+</div>
+</div>
+<div className="mt-3 rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-gray-300 font-quicksand">
+            No classes scheduled for today
+          </div>
+</div>
+
+<div className="grid grid-cols-2 gap-3">
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-center justify-between">
+<h4 className="text-sm text-gray-300 font-quicksand">Attendance</h4>
+<div className="inline-flex items-center gap-1 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-[11px] text-emerald-300 font-quicksand">
+<svg className="lucide lucide-trending-up w-3.5 h-3.5" data-lucide="trending-up" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg> Good
+              </div>
+</div>
+<div className="mt-2 text-2xl tracking-tight font-quicksand font-medium">92%</div>
+</div>
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-center justify-between">
+<h4 className="text-sm text-gray-300 font-quicksand">Marks</h4>
+<div className="inline-flex items-center gap-1 rounded-full border border-blue-400/30 bg-blue-400/10 px-2 py-0.5 text-[11px] text-blue-200 font-quicksand">
+<svg className="lucide lucide-info w-3.5 h-3.5" data-lucide="info" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> Latest
+              </div>
+</div>
+<div className="mt-2 text-2xl tracking-tight font-quicksand font-medium">—</div>
+</div>
+</div>
+</section>
+
+<section className="space-y-4 hidden" id="screen-attendance">
+<div className="flex items-center justify-between">
+<h2 className="text-xl font-semibold tracking-tight font-quicksand">Attendance</h2>
+<button className="inline-flex items-center gap-2 rounded-lg border border-blue-400/30 bg-blue-400/10 px-3 py-1.5 text-sm text-blue-200 hover:bg-blue-400/15 focus:outline-none focus:ring-2 focus:ring-blue-500/40 active:scale-[0.98] transition font-quicksand">
+<svg className="lucide lucide-line-chart w-4.5 h-4.5" data-lucide="line-chart" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+            Predict
+          </button>
+</div>
+
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-start justify-between">
+<div>
+<h3 className="text-base font-semibold tracking-tight font-quicksand">Data Structures</h3>
+<p className="text-xs text-gray-400 mt-0.5 font-quicksand">CSE201 • Theory</p>
+</div>
+<div className="text-right">
+<div className="text-xs text-gray-400 font-quicksand">Margin</div>
+<div className="text-sm text-emerald-300 font-medium font-quicksand">+3</div>
+</div>
+</div>
+<div className="mt-3 flex items-end justify-between">
+<div>
+<div className="text-2xl tracking-tight font-quicksand font-medium">92.00%</div>
+<div className="mt-2 flex items-center gap-1.5 text-[11px]">
+<span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-emerald-300 font-quicksand">P: 23</span>
+<span className="inline-flex items-center gap-1 rounded-full border border-red-400/30 bg-red-400/10 px-2 py-0.5 text-red-300 font-quicksand">A: 2</span>
+<span className="inline-flex items-center gap-1 rounded-full border border-blue-400/30 bg-blue-400/10 px-2 py-0.5 text-blue-200 font-quicksand">T: 25</span>
+</div>
+</div>
+</div>
+<div className="mt-4">
+<div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
+<div className="h-full w-[92%] rounded-full bg-gradient-to-r from-emerald-400 to-green-400"></div>
+</div>
+</div>
+</div>
+
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-start justify-between">
+<div>
+<h3 className="text-base font-semibold tracking-tight font-quicksand">Operating Systems Lab</h3>
+<p className="text-xs text-gray-400 mt-0.5 font-quicksand">CSE242 • Practical</p>
+</div>
+<div className="text-right">
+<div className="text-xs text-gray-400 font-quicksand">Margin</div>
+<div className="text-sm text-emerald-300 font-medium font-quicksand">+1</div>
+</div>
+</div>
+<div className="mt-3">
+<div className="text-2xl tracking-tight font-quicksand font-medium">100.00%</div>
+<div className="mt-2 flex items-center gap-1.5 text-[11px]">
+<span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-emerald-300 font-quicksand">P: 12</span>
+<span className="inline-flex items-center gap-1 rounded-full border border-red-400/30 bg-red-400/10 px-2 py-0.5 text-red-300 font-quicksand">A: 0</span>
+<span className="inline-flex items-center gap-1 rounded-full border border-blue-400/30 bg-blue-400/10 px-2 py-0.5 text-blue-200 font-quicksand">T: 12</span>
+</div>
+</div>
+<div className="mt-4">
+<div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
+<div className="h-full w-[100%] rounded-full bg-gradient-to-r from-emerald-400 to-green-400"></div>
+</div>
+</div>
+</div>
+
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-start justify-between">
+<div>
+<h3 className="text-base font-semibold tracking-tight font-quicksand">Discrete Mathematics</h3>
+<p className="text-xs text-gray-400 mt-0.5 font-quicksand">MAT221 • Theory</p>
+</div>
+<div className="text-right">
+<div className="text-xs text-gray-400 font-quicksand">Margin</div>
+<div className="text-sm text-red-300 font-medium font-quicksand">-1</div>
+</div>
+</div>
+<div className="mt-3">
+<div className="text-2xl tracking-tight font-quicksand font-medium">72.00%</div>
+<div className="mt-2 flex items-center gap-1.5 text-[11px]">
+<span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-emerald-300 font-quicksand">P: 18</span>
+<span className="inline-flex items-center gap-1 rounded-full border border-red-400/30 bg-red-400/10 px-2 py-0.5 text-red-300 font-quicksand">A: 7</span>
+<span className="inline-flex items-center gap-1 rounded-full border border-blue-400/30 bg-blue-400/10 px-2 py-0.5 text-blue-200 font-quicksand">T: 25</span>
+</div>
+</div>
+<div className="mt-4">
+<div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
+<div className="h-full w-[72%] rounded-full bg-gradient-to-r from-amber-400 to-orange-500"></div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="space-y-4 hidden" id="screen-marks">
+<div className="flex items-center justify-between">
+<h2 className="text-xl font-semibold tracking-tight font-quicksand">Marks</h2>
+</div>
+
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-start justify-between">
+<div>
+<h3 className="text-base font-semibold tracking-tight font-quicksand">Data Structures</h3>
+<p className="text-xs text-gray-400 mt-0.5 font-quicksand">CSE201 • Theory</p>
+</div>
+<div className="text-right">
+<div className="text-xs text-gray-400 font-quicksand">Score</div>
+<div className="text-sm text-blue-200 font-medium font-quicksand">0/0</div>
+</div>
+</div>
+<div className="mt-3 rounded-xl border border-white/10 bg-white/5 p-3">
+<div className="flex items-center gap-2 text-sm text-gray-300">
+<svg className="lucide lucide-info w-4 h-4 text-gray-300" data-lucide="info" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+<span className="font-quicksand">No Record Found</span>
+</div>
+</div>
+</div>
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-start justify-between">
+<div>
+<h3 className="text-base font-semibold tracking-tight font-quicksand">Operating Systems Lab</h3>
+<p className="text-xs text-gray-400 mt-0.5 font-quicksand">CSE242 • Practical</p>
+</div>
+<div className="text-right">
+<div className="text-xs text-gray-400 font-quicksand">Score</div>
+<div className="text-sm text-blue-200 font-medium font-quicksand">0/0</div>
+</div>
+</div>
+<div className="mt-3 rounded-xl border border-white/10 bg-white/5 p-3">
+<div className="flex items-center gap-2 text-sm text-gray-300">
+<svg className="lucide lucide-info w-4 h-4 text-gray-300" data-lucide="info" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+<span className="font-quicksand">No Record Found</span>
+</div>
+</div>
+</div>
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-start justify-between">
+<div>
+<h3 className="text-base font-semibold tracking-tight font-quicksand">Discrete Mathematics</h3>
+<p className="text-xs text-gray-400 mt-0.5 font-quicksand">MAT221 • Theory</p>
+</div>
+<div className="text-right">
+<div className="text-xs text-gray-400 font-quicksand">Score</div>
+<div className="text-sm text-blue-200 font-medium font-quicksand">0/0</div>
+</div>
+</div>
+<div className="mt-3 rounded-xl border border-white/10 bg-white/5 p-3">
+<div className="flex items-center gap-2 text-sm text-gray-300">
+<svg className="lucide lucide-info w-4 h-4 text-gray-300" data-lucide="info" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+<span className="font-quicksand">No Record Found</span>
+</div>
+</div>
+</div>
+</section>
+
+<section className="space-y-4 hidden" id="screen-calendar">
+<div className="flex items-center justify-between">
+<button className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 p-2 text-gray-300 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/40" id="month-prev">
+<svg className="lucide lucide-chevron-left w-4.5 h-4.5" data-lucide="chevron-left" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"></path></svg>
+</button>
+<h2 className="text-xl font-semibold tracking-tight font-quicksand">August</h2>
+<button className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 p-2 text-gray-300 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/40" id="month-next">
+<svg className="lucide lucide-chevron-right w-4.5 h-4.5" data-lucide="chevron-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"></path></svg>
+</button>
+</div>
+
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-start justify-between">
+<div className="flex items-center gap-3">
+<div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-blue-200 font-quicksand">Fri 8</div>
+<div>
+<h3 className="text-base font-medium tracking-tight font-quicksand">Physical Enrollment ends...</h3>
+<p className="text-xs text-gray-400 mt-0.5 font-quicksand">Academic Schedule</p>
+</div>
+</div>
+<div className="inline-flex items-center gap-1 rounded-full border border-blue-400/30 bg-blue-400/10 px-2.5 py-1 text-xs text-blue-200 font-quicksand">
+              DO 5
+            </div>
+</div>
+</div>
+
+<div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-start justify-between">
+<div className="flex items-center gap-3">
+<div className="rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-sm text-emerald-300 font-quicksand">Mon 11</div>
+<div>
+<h3 className="text-base font-medium tracking-tight text-emerald-200 font-quicksand">Holiday</h3>
+<p className="text-xs text-emerald-200/80 mt-0.5 font-quicksand">University Holiday</p>
+</div>
+</div>
+<div className="inline-flex items-center gap-1 rounded-full border border-emerald-400/40 bg-emerald-400/15 px-2.5 py-1 text-xs text-emerald-200 font-quicksand">
+<svg className="lucide lucide-sun w-3.5 h-3.5" data-lucide="sun" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+              Off
+            </div>
+</div>
+</div>
+
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="flex items-start justify-between">
+<div className="flex items-center gap-3">
+<div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-blue-200 font-quicksand">Tue 12</div>
+<div>
+<h3 className="text-base font-medium tracking-tight font-quicksand">Commencement of Classes</h3>
+<p className="text-xs text-gray-400 mt-0.5 font-quicksand">Semester Begins</p>
+</div>
+</div>
+<div className="inline-flex items-center gap-1 rounded-full border border-blue-400/30 bg-blue-400/10 px-2.5 py-1 text-xs text-blue-200 font-quicksand">
+              DO 1
+            </div>
+</div>
+</div>
+</section>
+
+<section className="space-y-4 hidden" id="screen-timetable">
+<div className="flex items-center justify-between">
+<h2 className="text-xl font-semibold tracking-tight font-quicksand">Timetable</h2>
+<div className="inline-flex rounded-full border border-white/10 bg-white/5 p-0.5">
+<button className="tt-seg px-3 py-1.5 text-xs rounded-full text-gray-300 hover:text-white bg-blue-500/20 text-blue-200 border border-blue-400/30 font-quicksand" data-day="1">1</button>
+<button className="tt-seg px-3 py-1.5 text-xs rounded-full text-gray-300 hover:text-white font-quicksand" data-day="2">2</button>
+<button className="tt-seg px-3 py-1.5 text-xs rounded-full text-gray-300 hover:text-white font-quicksand" data-day="3">3</button>
+<button className="tt-seg px-3 py-1.5 text-xs rounded-full text-gray-300 hover:text-white font-quicksand" data-day="4">4</button>
+<button className="tt-seg px-3 py-1.5 text-xs rounded-full text-gray-300 hover:text-white font-quicksand" data-day="5">5</button>
+</div>
+</div>
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 p-4">
+<div className="rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-gray-300 font-quicksand">
+            No classes scheduled for today
+          </div>
+</div>
+</section>
+
+<section className="space-y-4 hidden" id="screen-more">
+<h2 className="text-xl font-semibold tracking-tight font-quicksand">More</h2>
+<div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 divide-y divide-white/10">
+<button className="w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-white/5">
+<span className="inline-flex items-center gap-3 font-quicksand">
+<svg className="lucide lucide-user w-4.5 h-4.5 text-gray-300" data-lucide="user" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              Profile
+            </span>
+<svg className="lucide lucide-chevron-right w-4.5 h-4.5 text-gray-400" data-lucide="chevron-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"></path></svg>
+</button>
+<button className="w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-white/5">
+<span className="inline-flex items-center gap-3 font-quicksand">
+<svg className="lucide lucide-settings w-4.5 h-4.5 text-gray-300" data-lucide="settings" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              Settings
+            </span>
+<svg className="lucide lucide-chevron-right w-4.5 h-4.5 text-gray-400" data-lucide="chevron-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"></path></svg>
+</button>
+<button className="w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-white/5">
+<span className="inline-flex items-center gap-3 font-quicksand">
+<svg className="lucide lucide-help-circle w-4.5 h-4.5 text-gray-300" data-lucide="help-circle" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
+              Help & Support
+            </span>
+<svg className="lucide lucide-chevron-right w-4.5 h-4.5 text-gray-400" data-lucide="chevron-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"></path></svg>
+</button>
+</div>
+</section>
+</main>
+</div>
+
+<nav className="fixed bottom-0 inset-x-0 z-30">
+<div className="mx-auto max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl -mb-px">
+<div className="rounded-t-2xl border border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 px-3 py-2" style={{webkitBackdropFilter: `saturate(160%) blur(18px)`, backdropFilter: `saturate(160%) blur(18px)`}}>
+<div className="grid grid-cols-6 gap-1">
+<button className="nav-btn group flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-blue-500/40 active text-blue-300" data-screen="home">
+<svg className="lucide lucide-home w-5 h-5 group-[.active]:text-blue-300" data-lucide="home" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+<span className="font-quicksand">Home</span>
+</button>
+<button className="nav-btn group flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] text-gray-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-blue-500/40" data-screen="attendance">
+<svg className="lucide lucide-check-circle w-[20px] h-[20px]" data-lucide="check-circle" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`, width: `20px`, height: `20px`, color: `rgb(156, 163, 175)`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path className="" d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg>
+<span className="font-quicksand">Atten</span>
+</button>
+<button className="nav-btn group flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] text-gray-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-blue-500/40" data-screen="timetable">
+<svg className="lucide lucide-table w-5 h-5" data-lucide="table" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v18"></path><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M3 9h18"></path><path d="M3 15h18"></path></svg>
+<span className="font-quicksand">TimeT</span>
+</button>
+<button className="nav-btn group flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] text-gray-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-blue-500/40" data-screen="marks">
+<svg className="lucide lucide-graduation-cap w-5 h-5" data-lucide="graduation-cap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>
+<span className="font-quicksand">Marks</span>
+</button>
+<button className="nav-btn group flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] text-gray-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-blue-500/40" data-screen="calendar">
+<svg className="lucide lucide-calendar w-5 h-5" data-lucide="calendar" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M3 10h18"></path></svg>
+<span className="font-quicksand">Calan</span>
+</button>
+<button className="nav-btn group flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] text-gray-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-blue-500/40" data-screen="more">
+<svg className="lucide lucide-more-horizontal w-5 h-5" data-lucide="more-horizontal" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{strokeWidth: `1.5`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+<span className="font-quicksand">More</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+
+
+    </>
+  );
+}

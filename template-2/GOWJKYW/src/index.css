@@ -1,0 +1,79 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        :root {
+            --font-main: 'Roboto', sans-serif;
+            --bg-page: #121212;
+            --bg-component: #2a2a2a;
+            --text-primary: #e0e0e0;
+            --text-heading: #ffffff;
+            --border-color: #444444;
+            --text-accent: #007bff;
+            --color-info: #17a2b8;
+            --color-warning: #ffc107;
+            --color-success: #28a745;
+            --border-radius-lg: 0.5rem;
+            --shadow-md: 0 .5rem 1rem rgba(0, 0, 0, 0.1);
+            --transition-speed-normal: 0.2s;
+            --transition-timing-function: ease-in-out;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .dashboard-widget {
+            background-color: var(--bg-component);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: transform var(--transition-speed-normal) var(--transition-timing-function), 
+                        box-shadow var(--transition-speed-normal) var(--transition-timing-function);
+            padding: 25px;
+            max-width: 400px;
+            min-height: 350px;
+        }
+
+        .dashboard-widget:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+        }
+
+        .widget-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            max-height: 300px;
+        }
+    
+
+
+      /* Custom font utilities */
+      .font-roboto { font-family: 'Roboto', sans-serif !important; }
+    

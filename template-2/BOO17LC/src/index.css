@@ -1,0 +1,137 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body{font-family:'Inter',sans-serif}
+.display{font-family:'Space Grotesk',sans-serif}
+/* Animation classes */
+.animate-fade-slide {
+animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+.animate-fade-blur {
+animation: fadeBlurIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+.animate-slide-left {
+animation: slideFromLeft 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+.animate-slide-right {
+animation: slideFromRight 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+.animate-scale-fade {
+animation: scaleFadeIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+/* Initial states */
+.animate-fade-slide,
+.animate-fade-blur,
+.animate-slide-left,
+.animate-slide-right,
+.animate-scale-fade {
+opacity: 0;
+}
+.animate-fade-slide {
+transform: translateY(30px);
+}
+.animate-fade-blur {
+filter: blur(10px);
+transform: translateY(20px);
+}
+.animate-slide-left {
+transform: translateX(-50px);
+}
+.animate-slide-right {
+transform: translateX(50px);
+}
+.animate-scale-fade {
+transform: scale(0.95);
+}
+/* Keyframes */
+@keyframes fadeSlideUp {
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+@keyframes fadeBlurIn {
+to {
+opacity: 1;
+filter: blur(0);
+transform: translateY(0);
+}
+}
+@keyframes slideFromLeft {
+to {
+opacity: 1;
+transform: translateX(0);
+}
+}
+@keyframes slideFromRight {
+to {
+opacity: 1;
+transform: translateX(0);
+}
+}
+@keyframes scaleFadeIn {
+to {
+opacity: 1;
+transform: scale(1);
+}
+}
+/* Animation delays */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-800 { animation-delay: 0.8s; }
+.delay-900 { animation-delay: 0.9s; }
+.delay-1000 { animation-delay: 1s; }
+.delay-1100 { animation-delay: 1.1s; }
+.delay-1200 { animation-delay: 1.2s; }
+.delay-1300 { animation-delay: 1.3s; }
+.delay-1400 { animation-delay: 1.4s; }
+.delay-1500 { animation-delay: 1.5s; }
+
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }

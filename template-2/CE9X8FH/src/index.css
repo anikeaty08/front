@@ -1,0 +1,123 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body { font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
+.sf-pro-display { font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
+.fade-in { opacity: 0; animation: fadeIn 1.2s ease-out forwards; }
+.slide-up { transform: translateY(40px); opacity: 0; animation: slideUp 1s ease-out forwards; }
+.blur-in { filter: blur(10px); opacity: 0; animation: blurIn 1.5s ease-out forwards; }
+.stagger-1 { animation-delay: 0.2s; }
+.stagger-2 { animation-delay: 0.4s; }
+.stagger-3 { animation-delay: 0.6s; }
+.stagger-4 { animation-delay: 0.8s; }
+.stagger-5 { animation-delay: 1s; }
+.stagger-6 { animation-delay: 1.2s; }
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
+@keyframes blurIn { to { filter: blur(0); opacity: 1; } }
+.glass-effect {
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+}
+/* Success Story Card Hover Effects */
+.success-card { transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
+.success-card::before {
+content: '';
+position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+transition: left 0.8s ease-in-out; z-index: 1;
+}
+.success-card:hover::before { left: 100%; }
+.success-card:hover { transform: translateY(-12px) scale(1.02); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.3); }
+.success-card:hover .card-image { transform: scale(1.1); }
+.success-card:hover .card-gradient { opacity: 0.8; }
+.success-card:hover .card-content { transform: translateY(-4px); }
+.card-image { transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+.card-gradient { transition: opacity 0.6s ease; }
+.card-content { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+/* Counter Animation */
+@keyframes countUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+.counter { animation: countUp 0.8s ease-out forwards; }
+/* Glow-follow button (scoped, no global element overrides) */
+:root {
+--glow-core: rgba(255, 255, 255, 0.8);
+--glow-color: rgba(192, 132, 252, 0.35);
+--glow-color-strong: rgba(192, 132, 252, 0.55);
+}
+.glow-btn {
+--x: 50%; --y: 50%;
+position: relative; display: inline-flex; align-items: center; gap: 8px;
+appearance: none; border: 1px solid #e5e7eb; background: #fff; color: #111827;
+padding: 14px 28px; font-weight: 600; border-radius: 9999px; cursor: pointer;
+letter-spacing: .2px; transition: transform .2s ease, border-color .2s ease;
+box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 8px 24px rgba(0,0,0,.08); isolation: isolate;
+}
+.glow-btn:hover { transform: translateY(-1px); border-color: #d1d5db; }
+.glow-btn::before, .glow-btn::after {
+content: ""; position: absolute; inset: -4px; border-radius: inherit; pointer-events: none;
+opacity: 0; transition: opacity .2s ease; will-change: background; z-index: -1;
+}
+.glow-btn::before {
+background:
+radial-gradient(90px 90px at var(--x) var(--y), var(--glow-core) 0%, rgba(255,255,255,0.25) 45%, transparent 70%),
+radial-gradient(140px 140px at var(--x) var(--y), var(--glow-color-strong) 0%, transparent 75%);
+mix-blend-mode: screen;
+}
+.glow-btn::after {
+inset: -8px; border-radius: inherit;
+background: radial-gradient(200px 200px at var(--x) var(--y), var(--glow-color) 0%, transparent 80%);
+filter: blur(20px); z-index: -2;
+}
+.glow-btn:hover::before, .glow-btn:hover::after { opacity: 1; }
+.icon-box { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.icon-box svg { width: 20px; height: 20px; stroke: currentColor; }
+/* Code editor line animation */
+@keyframes lineIn {
+0% { opacity: 0; transform: translateX(-10px); }
+100% { opacity: 1; transform: translateX(0); }
+}
+.code-line { opacity: 0; animation: lineIn .45s ease-out forwards; }
+
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }

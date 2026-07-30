@@ -1,0 +1,36 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        html, body { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #1e1e1e; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; }
+        .macos-window { background: rgba(40, 40, 40, 0.95); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .macos-titlebar { background: rgba(50, 50, 50, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .traffic-light { width: 12px; height: 12px; border-radius: 50%; }
+        .traffic-light.close { background: #ff5f57; }
+        .traffic-light.minimize { background: #ffbd2e; }
+        .traffic-light.maximize { background: #28ca42; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .sidebar-glass { background: rgba(30, 30, 30, 0.8); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border-right: 1px solid rgba(255, 255, 255, 0.1); }
+        .gradient-border { position: relative; background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(59, 130, 246, 0.1)); }
+        .gradient-border::before { content: ''; position: absolute; inset: 0; padding: 1px; background: linear-gradient(135deg, #4f46e5, #3b82f6, #8b5cf6); border-radius: inherit; mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: xor; -webkit-mask-composite: xor; }
+        .card-glow { box-shadow: 0 0 30px rgba(79, 70, 229, 0.1), 0 0 60px rgba(59, 130, 246, 0.05); }
+        .schema-gradient { background: linear-gradient(135deg, #4f46e5, #3b82f6, #8b5cf6, #f59e0b); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        #aurora-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; }
+        .sidebar-item:hover { background: rgba(255, 255, 255, 0.08); }
+        .sidebar-item.active { background: rgba(79, 70, 229, 0.2); }
+        .metric-bar { background: linear-gradient(90deg, #4f46e5, #3b82f6); }
+        .status-dot { animation: pulse 2s infinite; }
+        .macos-button { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); transition: all 0.2s ease; }
+        .macos-button:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-1px); }
+        .profile-container { background: rgba(40, 40, 40, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .app-container { height: calc(100vh - 3rem); }
+        .main-content { height: calc(100vh - 8rem); overflow-y: auto; }
+    

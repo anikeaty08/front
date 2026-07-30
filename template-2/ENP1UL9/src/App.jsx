@@ -1,0 +1,243 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+        // Utility function to convert hex to normalized RGB
+        function hexToNormalizedRGB(hex) {
+            hex = hex.replace("#", "");
+            return [
+                parseInt(hex.slice(0, 2), 16) / 255,
+                parseInt(hex.slice(2, 4), 16) / 255,
+                parseInt(hex.slice(4, 6), 16) / 255,
+            ];
+        }
+
+        // Shader code
+        const vertexShader = `
+            varying vec2 vUv;
+            varying vec3 vPosition;
+
+            void main() {
+                vPosition = position;
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `;
+
+        const fragmentShader = `
+            varying vec2 vUv;
+            varying vec3 vPosition;
+
+            uniform float uTime;
+            uniform vec3  uColor;
+            uniform float uSpeed;
+            uniform float uScale;
+            uniform float uRotation;
+            uniform float uNoiseIntensity;
+
+            const float e = 2.71828182845904523536;
+
+            float noise(vec2 texCoord) {
+                float G = e;
+                vec2  r = (G * sin(G * texCoord));
+                return fract(r.x * r.y * (1.0 + texCoord.x));
+            }
+
+            vec2 rotateUvs(vec2 uv, float angle) {
+                float c = cos(angle);
+                float s = sin(angle);
+                mat2  rot = mat2(c, -s, s, c);
+                return rot * uv;
+            }
+
+            void main() {
+                float rnd        = noise(gl_FragCoord.xy);
+                vec2  uv         = rotateUvs(vUv * uScale, uRotation);
+                vec2  tex        = uv * uScale;
+                float tOffset    = uSpeed * uTime;
+
+                tex.y += 0.03 * sin(8.0 * tex.x - tOffset);
+
+                float pattern = 0.6 +
+                              0.4 * sin(5.0 * (tex.x + tex.y +
+                                               cos(3.0 * tex.x + 5.0 * tex.y) +
+                                               0.02 * tOffset) +
+                                       sin(20.0 * (tex.x + tex.y - 0.1 * tOffset)));
+
+                vec4 col = vec4(uColor, 1.0) * vec4(pattern) - rnd / 15.0 * uNoiseIntensity;
+                col.a = 1.0;
+                gl_FragColor = col;
+            }
+        `;
+
+        // Three.js setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        
+        const container = document.getElementById('canvas-container');
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // Shader uniforms
+        const uniforms = {
+            uSpeed: { value: 5 },
+            uScale: { value: 1 },
+            uNoiseIntensity: { value: 1.5 },
+            uColor: { value: new THREE.Color(...hexToNormalizedRGB("#7B7481")) },
+            uRotation: { value: 0 },
+            uTime: { value: 0 }
+        };
+
+        // Create shader material and mesh
+        const material = new THREE.ShaderMaterial({
+            uniforms: uniforms,
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader
+        });
+
+        const geometry = new THREE.PlaneGeometry(2, 2);
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        // Controls
+        const speedControl = document.getElementById('speed');
+        const scaleControl = document.getElementById('scale');
+        const noiseControl = document.getElementById('noise');
+        const rotationControl = document.getElementById('rotation');
+        const colorControl = document.getElementById('color');
+
+        speedControl.addEventListener('input', (e) => {
+            uniforms.uSpeed.value = parseFloat(e.target.value);
+        });
+
+        scaleControl.addEventListener('input', (e) => {
+            uniforms.uScale.value = parseFloat(e.target.value);
+        });
+
+        noiseControl.addEventListener('input', (e) => {
+            uniforms.uNoiseIntensity.value = parseFloat(e.target.value);
+        });
+
+        rotationControl.addEventListener('input', (e) => {
+            uniforms.uRotation.value = parseFloat(e.target.value);
+        });
+
+        colorControl.addEventListener('input', (e) => {
+            const rgb = hexToNormalizedRGB(e.target.value);
+            uniforms.uColor.value.setRGB(rgb[0], rgb[1], rgb[2]);
+        });
+
+        // Animation loop
+        const clock = new THREE.Clock();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const delta = clock.getDelta();
+            uniforms.uTime.value += 0.1 * delta;
+            
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        function onWindowResize() {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        window.addEventListener('resize', onWindowResize);
+
+        // Start animation
+        animate();
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+<div id="canvas-container"></div>
+<div className="content">
+<h1>Silk Shader Background</h1>
+<p>Beautiful animated shader background with customizable parameters</p>
+<p><small>Original design from <a href="https://www.reactbits.dev/backgrounds/silk" target="_blank">ReactBits Silk Background</a></small></p>
+</div>
+<div className="controls">
+<div className="control-group">
+<label htmlFor="speed">Speed</label>
+<input id="speed" max="10" min="0" step="0.1" type="range" value="5" />
+</div>
+<div className="control-group">
+<label htmlFor="scale">Scale</label>
+<input id="scale" max="5" min="0.1" step="0.1" type="range" value="1" />
+</div>
+<div className="control-group">
+<label htmlFor="noise">Noise Intensity</label>
+<input id="noise" max="5" min="0" step="0.1" type="range" value="1.5" />
+</div>
+<div className="control-group">
+<label htmlFor="rotation">Rotation</label>
+<input id="rotation" max="6.28" min="0" step="0.1" type="range" value="0" />
+</div>
+<div className="control-group">
+<label htmlFor="color">Color</label>
+<input id="color" type="color" value="#7B7481" />
+</div>
+</div>
+
+
+    </>
+  );
+}

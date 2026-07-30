@@ -1,0 +1,70 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+:root { color-scheme: light; }
+html, body { height: 100%; }
+body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Segoe UI, Roboto, "Helvetica Neue", Arial; }
+.glass { backdrop-filter: saturate(180%) blur(20px); }
+.fade-in { opacity: 0; animation: fadeIn 0.8s ease-out forwards; }
+.slide-up { opacity: 0; transform: translateY(30px); animation: slideUp 0.8s ease-out forwards; }
+.blur-in { opacity: 0; filter: blur(10px); animation: blurIn 1s ease-out forwards; }
+.scale-in { opacity: 0; transform: scale(0.95); animation: scaleIn 0.6s ease-out forwards; }
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+@keyframes blurIn { to { opacity: 1; filter: blur(0); } }
+@keyframes scaleIn { to { opacity: 1; transform: scale(1); } }
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-800 { animation-delay: 0.8s; }
+.hero-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); }
+
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }

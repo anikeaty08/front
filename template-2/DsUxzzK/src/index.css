@@ -1,0 +1,29 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b;
+        }
+        .radial-bar {
+            --progress: 0;
+            background: conic-gradient(currentColor calc(var(--progress) * 1%), #27272a 0);
+            border-radius: 50%;
+        }
+        .card-border {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+    

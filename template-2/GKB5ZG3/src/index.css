@@ -1,0 +1,41 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .custom-shadow {
+      box-shadow:
+        rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+        rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    }
+    .inherited-styles-for-exported-element {
+      font-family: Nunito, arial, sans-serif;
+    }
+    @keyframes button-spin {
+      0% { transform: translate(-50%) rotate(0deg);}
+      to { transform: translate(-50%) rotate(720deg);}
+    }
+    .button-loader {
+      animation: button-spin 1.5s ease-in-out infinite;
+      display: none;
+      height: 100%;
+      left: 50%;
+      position: absolute;
+      top: 0;
+      transform: translate(-50%);
+      width: auto;
+    }
+    button.loading .button-loader {
+      display: block;
+    }
+    button.loading .button-content {
+      opacity: 0.3;
+    }
+  

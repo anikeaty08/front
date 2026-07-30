@@ -1,0 +1,56 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    html,body{height:100%;font-family:'Inter',sans-serif;background:#0a0a0a;}
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
+    
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes slideInLeft{from{opacity:0;transform:translateX(-30px);}to{opacity:1;transform:translateX(0);}}
+    @keyframes slideInRight{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
+    @keyframes blurIn{from{opacity:0;filter:blur(8px);transform:scale(0.95);}to{opacity:1;filter:blur(0);transform:scale(1);}}
+    @keyframes float{0%,100%{transform:translateY(0px);}50%{transform:translateY(-10px);}}
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
+    
+    .animate-fade-in-up{animation:fadeInUp 0.8s ease-out forwards;}
+    .animate-slide-in-left{animation:slideInLeft 0.8s ease-out forwards;}
+    .animate-slide-in-right{animation:slideInRight 0.8s ease-out forwards;}
+    .animate-blur-in{animation:blurIn 0.8s ease-out forwards;}
+    .animate-float{animation:float 3s ease-in-out infinite;}
+    .animate-pulse-slow{animation:pulse 2s ease-in-out infinite;}
+    
+    .delay-100{animation-delay:0.1s;}
+    .delay-200{animation-delay:0.2s;}
+    .delay-300{animation-delay:0.3s;}
+    .delay-400{animation-delay:0.4s;}
+    .delay-500{animation-delay:0.5s;}
+    .delay-600{animation-delay:0.6s;}
+    .delay-700{animation-delay:0.7s;}
+    .delay-800{animation-delay:0.8s;}
+    .delay-1000{animation-delay:1s;}
+    .delay-1200{animation-delay:1.2s;}
+    
+    .initial-hidden{opacity:0;}
+    
+    .glow-green{box-shadow:0 0 20px rgba(34,197,94,0.3);}
+    .glow-blue{box-shadow:0 0 20px rgba(59,130,246,0.3);}
+    .glow-purple{box-shadow:0 0 20px rgba(147,51,234,0.3);}
+    
+    .glass{backdrop-filter:blur(20px);background:rgba(17,17,17,0.8);border:1px solid rgba(255,255,255,0.1);}
+    .glass-card{backdrop-filter:blur(10px);background:rgba(23,23,23,0.6);border:1px solid rgba(255,255,255,0.08);}
+    
+    .gradient-green{background:linear-gradient(135deg,#22c55e,#16a34a);}
+    .gradient-blue{background:linear-gradient(135deg,#3b82f6,#1d4ed8);}
+    .gradient-purple{background:linear-gradient(135deg,#9333ea,#7c3aed);}
+    .gradient-orange{background:linear-gradient(135deg,#f59e0b,#d97706);}
+  

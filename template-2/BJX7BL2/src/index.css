@@ -1,0 +1,28 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    @layer utilities {
+      .bg-linear-dark { background-color: #000000; }
+      .bg-linear-card { background-color: #101010; }
+      .border-linear { border-color: #333333; }
+      .text-linear-primary { color: #FFFFFF; }
+      .text-linear-secondary { color: #8A8F98; }
+      .text-linear-accent { color: #5E6AD2; }
+      .button-linear { 
+        background-color: #5E6AD2; 
+        transition: all 0.2s ease;
+      }
+      .button-linear:hover { 
+        background-color: #6872E5;
+      }
+    }
+  

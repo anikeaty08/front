@@ -1,0 +1,21 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    @keyframes float { 0% {transform: translateY(0px);} 50% {transform: translateY(-10px);} 100% {transform: translateY(0px);} }
+    .animate-float { animation: float 8s ease-in-out infinite; }
+    .animate-float-delay-1 { animation: float 8s ease-in-out 2s infinite; }
+    .animate-float-delay-2 { animation: float 8s ease-in-out 4s infinite; }
+    :root {
+      --gradient-background-start: rgb(20, 30, 48);
+      --gradient-background-end: rgb(36, 59, 85);
+    }
+  

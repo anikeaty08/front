@@ -1,0 +1,75 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body{font-family:'Inter',sans-serif}
+/* Custom scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:9999px}
+::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.2)}
+/* Custom checkbox */
+.checkbox:checked + .checkbox-indicator{background:#6366f1;border-color:#6366f1;transform:scale(1)}
+.checkbox:checked + .checkbox-indicator svg{opacity:1;transform:scale(1)}
+.checkbox-indicator{transition:all 0.2s cubic-bezier(0.4,0,0.2,1)}
+.checkbox-indicator svg{opacity:0;transform:scale(0.8);transition:all 0.15s cubic-bezier(0.4,0,0.2,1)}
+/* Animations */
+@keyframes fadeSlideIn{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+@keyframes scaleIn{0%{opacity:0;transform:scale(0.95)}100%{opacity:1;transform:scale(1)}}
+.animate-fade-in{animation:fadeIn 0.6s cubic-bezier(0.4,0,0.2,1) forwards}
+.animate-slide-in{animation:fadeSlideIn 0.8s cubic-bezier(0.4,0,0.2,1) forwards}
+.animate-scale-in{animation:scaleIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards}
+/* Hover effects */
+.card-hover{transition:all 0.3s cubic-bezier(0.4,0,0.2,1)}
+.card-hover:hover{transform:translateY(-4px);box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04)}
+/* Mobile menu */
+.mobile-menu{transform:translateX(-100%);transition:transform 0.3s ease}
+.mobile-menu.open{transform:translateX(0)}
+/* Custom range slider */
+.range-slider{-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:#e5e7eb;outline:none}
+.range-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;height:16px;width:16px;border-radius:50%;background:#6366f1;cursor:pointer;border:2px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.1)}
+.range-slider::-moz-range-thumb{height:16px;width:16px;border-radius:50%;background:#6366f1;cursor:pointer;border:2px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.1)}
+
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }

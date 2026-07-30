@@ -1,0 +1,113 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+html{font-family:'Inter',sans-serif}
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(30px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+@keyframes slideInLeft {
+from {
+opacity: 0;
+transform: translateX(-50px) rotate(-6deg);
+}
+to {
+opacity: 1;
+transform: translateX(0) rotate(-6deg);
+}
+}
+@keyframes slideInRight {
+from {
+opacity: 0;
+transform: translateX(50px) rotate(6deg);
+}
+to {
+opacity: 1;
+transform: translateX(0) rotate(6deg);
+}
+}
+.animate-fade-up {
+animation: fadeInUp 0.8s ease-out forwards;
+}
+.animate-slide-left {
+animation: slideInLeft 1s ease-out forwards;
+}
+.animate-slide-right {
+animation: slideInRight 1s ease-out 0.2s forwards;
+}
+.card-hover {
+transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+transform-style: preserve-3d;
+perspective: 1000px;
+}
+.card-hover:hover {
+transform: scale(1.05) rotate(-8deg) rotateX(5deg) rotateY(-8deg) translateZ(50px);
+box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+.card-hover-right:hover {
+transform: scale(1.05) rotate(8deg) rotateX(5deg) rotateY(8deg) translateZ(50px);
+}
+.card-content {
+transform: translateZ(20px);
+transition: transform 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+.card-hover:hover .card-content {
+transform: translateZ(40px);
+}
+.card-icon {
+transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+.card-hover:hover .card-icon {
+transform: scale(1.1) rotateY(15deg);
+}
+
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }

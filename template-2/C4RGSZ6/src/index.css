@@ -1,0 +1,16 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+.shadow-innerBorder {
+box-shadow: inset 0 2px 8px 0 rgba(0,0,0,0.32);
+}
+

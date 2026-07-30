@@ -1,0 +1,21 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+:root { color-scheme: light; }
+html, body { height: 100%; }
+body { font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji'; }
+/* Smooth edges for SVG lines */
+.connector { shape-rendering: geometricPrecision; }
+/* Hide scrollbars on WebKit while keeping scrollability */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+

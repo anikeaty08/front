@@ -1,0 +1,23 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    @keyframes float { 0% {transform: translateY(0px);} 50% {transform: translateY(-20px);} 100% {transform: translateY(0px);} }
+    @keyframes pulse { 0% {opacity: 0.4;} 50% {opacity: 0.8;} 100% {opacity: 0.4;} }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-float-delay-1 { animation: float 6s ease-in-out 1s infinite; }
+    .animate-float-delay-2 { animation: float 6s ease-in-out 2s infinite; }
+    .animate-pulse-slow { animation: pulse 4s ease-in-out infinite; }
+    :root {
+      --gradient-background-start: rgb(20, 30, 48);
+      --gradient-background-end: rgb(36, 59, 85);
+    }
+  

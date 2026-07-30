@@ -1,0 +1,51 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body {
+      font-family: 'Manrope', sans-serif;
+    }
+    .pie-segment {
+      --percentage: 0;
+      --rotation: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 50% 0%);
+      transform: rotate(calc(var(--rotation) * 1deg));
+      transition: filter 0.2s ease;
+    }
+    .pie-segment::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, currentColor var(--percentage), transparent 0);
+    }
+    .pie-segment:hover {
+      filter: brightness(1.1) saturate(1.1);
+      cursor: pointer;
+    }
+    .legend-item:hover .legend-dot {
+      transform: scale(1.2);
+    }
+    .legend-item {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .legend-item:hover {
+      background-color: #f9fafb;
+    }
+    .legend-dot {
+      transition: transform 0.2s ease;
+    }
+  

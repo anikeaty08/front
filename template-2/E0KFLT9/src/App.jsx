@@ -1,0 +1,693 @@
+import React, { useEffect } from 'react';
+
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      {
+
+  !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
+
+}
+
+{
+
+  (function () {
+    var btn = document.getElementById('aura-emf7rfrzl');
+    if (!btn) return;
+    var scrollToPlan = function (e) {
+      if (e) e.preventDefault();
+      var t = document.querySelector('#plan');
+      if (t) {
+        t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        location.hash = '#plan';
+      }
+    };
+    btn.addEventListener('click', scrollToPlan);
+  })();
+
+}
+
+{
+
+      // Initialize Lucide icons
+      document.addEventListener('DOMContentLoaded', function () {
+        try { window.lucide && window.lucide.createIcons(); } catch (e) {}
+      });
+
+      // Global smooth scroll for in-page anchors (except approve triggers)
+      (function () {
+        var anchors = document.querySelectorAll('a[href^="#"]:not([data-approve])');
+        anchors.forEach(function (a) {
+          a.addEventListener('click', function (e) {
+            var hash = a.getAttribute('href');
+            if (!hash || hash === '#') return;
+            var el = document.querySelector(hash);
+            if (!el) return;
+            e.preventDefault();
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            history.pushState(null, '', hash);
+          });
+        });
+      })();
+
+      // ROI Slider Logic
+      (function () {
+        var input = document.getElementById('roiDeals');
+        var label = document.getElementById('roiDealsLabel');
+        var revenueEl = document.getElementById('roiRevenue');
+        var multipleEl = document.getElementById('roiMultiple');
+        var fill = document.getElementById('roiFill');
+        var knob = document.getElementById('roiKnob');
+        if (!input || !label || !revenueEl || !multipleEl || !fill || !knob) return;
+
+        var max = parseInt(input.max || '6', 10);
+        var dealValue = 25000;
+        var testTotal = 3000;
+
+        function fmtMoney(n) {
+          return n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+        }
+
+        function update() {
+          var v = parseInt(input.value || '0', 10);
+          var pct = (v / max) * 100;
+          label.textContent = String(v);
+          fill.style.width = pct + '%';
+          knob.style.left = pct + '%';
+
+          var monthly = v * dealValue;
+          revenueEl.textContent = fmtMoney(monthly);
+
+          var multiple = testTotal > 0 ? (monthly / testTotal) : 0;
+          multipleEl.textContent = (multiple || 0).toFixed(1) + '×';
+        }
+
+        input.addEventListener('input', update);
+        update();
+      })();
+
+      // Approve Modal + Email + Confetti
+      (function () {
+        var overlay = document.getElementById('approveOverlay');
+        var backdrop = document.getElementById('approveBackdrop');
+        var dialog = document.getElementById('approveDialog');
+        var closeBtn = document.getElementById('approveClose');
+        var doneBtn = document.getElementById('approveDone');
+        var mailBtn = document.getElementById('mailtoApprove');
+        var confettiCanvas = document.getElementById('confetti-canvas');
+
+        function trapFocus(e) {
+          if (!overlay || overlay.classList.contains('hidden')) return;
+          var focusable = overlay.querySelectorAll('a, button, textarea, input, select, [tabindex]:not([tabindex="-1"])');
+          focusable = Array.prototype.filter.call(focusable, function (el) { return !el.hasAttribute('disabled'); });
+          if (focusable.length === 0) return;
+          var first = focusable[0], last = focusable[focusable.length - 1];
+          if (e.key === 'Tab') {
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+          }
+        }
+
+        function openModal() {
+          if (!overlay || !backdrop || !dialog) return;
+          overlay.classList.remove('hidden');
+          requestAnimationFrame(function(){
+            backdrop.classList.remove('opacity-0');
+            backdrop.classList.add('opacity-100');
+            dialog.classList.remove('opacity-0','translate-y-6','sm:scale-95');
+            dialog.classList.add('opacity-100','translate-y-0','sm:scale-100');
+          });
+          // Show confetti canvas overlay (visual layer) if present
+          if (confettiCanvas) confettiCanvas.classList.remove('hidden');
+          launchConfetti();
+          // Focus first interactive
+          setTimeout(function(){ dialog.querySelector('a,button')?.focus(); }, 50);
+          document.addEventListener('keydown', onKey);
+          document.addEventListener('keydown', trapFocus, true);
+        }
+
+        function closeModal() {
+          if (!overlay || !backdrop || !dialog) return;
+          backdrop.classList.remove('opacity-100');
+          backdrop.classList.add('opacity-0');
+          dialog.classList.add('opacity-0','translate-y-6','sm:scale-95');
+          dialog.classList.remove('opacity-100','translate-y-0','sm:scale-100');
+          setTimeout(function(){
+            overlay.classList.add('hidden');
+            if (confettiCanvas) confettiCanvas.classList.add('hidden');
+          }, 180);
+          document.removeEventListener('keydown', onKey);
+          document.removeEventListener('keydown', trapFocus, true);
+        }
+
+        function onKey(e) {
+          if (e.key === 'Escape') closeModal();
+        }
+
+        function launchConfetti() {
+          try {
+            // Primary burst
+            confetti && confetti({
+              spread: 70,
+              startVelocity: 45,
+              particleCount: 120,
+              scalar: 1.1,
+              gravity: 0.9,
+              ticks: 200,
+              origin: { x: 0.5, y: 0.35 },
+              zIndex: 70
+            });
+            // Side bursts
+            setTimeout(function(){
+              confetti({
+                angle: 60,
+                spread: 55,
+                particleCount: 80,
+                origin: { x: 0.15, y: 0.2 },
+                zIndex: 70
+              });
+              confetti({
+                angle: 120,
+                spread: 55,
+                particleCount: 80,
+                origin: { x: 0.85, y: 0.2 },
+                zIndex: 70
+              });
+            }, 180);
+          } catch (e) {
+            // no-op if confetti isn't available
+          }
+        }
+
+        function buildMailto() {
+          var subject = 'Phase 1 Approved - TKC x Rootmosaic';
+          var lines = [
+            'Hello Rocha,',
+            '',
+            'Phase 1 has been approved.',
+            '',
+            'Page: ' + location.href,
+            'Timestamp: ' + new Date().toLocaleString(),
+            '',
+            '— Auto message from proposal page'
+          ];
+          var body = encodeURIComponent(lines.join('\n'));
+          return 'mailto:rocha@yahwaylove.com?subject=' + encodeURIComponent(subject) + '&body=' + body;
+        }
+
+        function sendApprovalEmail() {
+          var url = buildMailto();
+          // Graceful fallback: attempt to open mail client
+          try {
+            // Try using window.open to avoid navigation
+            var win = window.open(url, '_blank');
+            if (!win) {
+              // Fallback to location change if popup blocked
+              window.location.href = url;
+            }
+          } catch (e) {
+            window.location.href = url;
+          }
+        }
+
+        // Wire approve buttons
+        var approveBtns = document.querySelectorAll('[data-approve]');
+        approveBtns.forEach(function(btn){
+          btn.addEventListener('click', function(e){
+            e.preventDefault();
+            openModal();
+            // async nudge to open mail client while modal is visible
+            setTimeout(sendApprovalEmail, 600);
+          });
+        });
+
+        // Backdrop click closes
+        backdrop?.addEventListener('click', closeModal);
+        closeBtn?.addEventListener('click', closeModal);
+        doneBtn?.addEventListener('click', closeModal);
+        mailBtn?.addEventListener('click', function(e){ e.preventDefault(); sendApprovalEmail(); });
+
+      })();
+    
+}
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      <div className="spline-container fixed top-0 w-full h-screen -z-10"><iframe frameborder="0" height="100%" src="https://app.spline.design/community/file/3f20b8f2-b198-4d07-ba66-e7ece1a6d207" width="100%"></iframe></div><div className="aura-background-component fixed top-0 w-full h-screen -z-10"><div className="absolute w-full h-full left-0 top-0 -z-10" data-us-project="x6cbPWi9roeeiZ8cuBu3"></div>
+</div>
+
+<div className="pointer-events-none fixed inset-0 -z-10">
+<div className="absolute -top-24 -left-24 h-96 w-96 rounded-full blur-3xl" style={{backgroundColor: `rgba(37,99,235,0.08)`}}></div>
+<div className="absolute top-1/3 -right-24 h-80 w-80 rounded-full blur-3xl" style={{backgroundColor: `rgba(37,99,235,0.06)`}}></div>
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-40 w-[70%] bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.10),transparent_60%)]"></div>
+</div>
+
+<header className="sticky top-4 z-50">
+<nav className="mx-auto max-w-6xl rounded-3xl border px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between bg-[#1f2937] border-white/10">
+<div className="flex items-center gap-3">
+<div className="inline-flex h-6 w-6 items-center justify-center rounded-md" style={{backgroundColor: `rgba(37,99,235,0.15)`}}>
+<span className="text-[11px] tracking-tight font-medium" style={{color: `#2563eb`}}>TK</span>
+</div>
+<span className="text-sm sm:text-base tracking-tight" style={{color: `#e5e7eb`}}>Thy Kingdom Come Productions <span className="text-neutral-500" style={{color: `#9ca3af`}}>x</span> Rootmosaic</span>
+</div>
+<div className="hidden md:flex items-center gap-6">
+<a className="text-sm transition-colors tracking-tight hover:text-[#2563eb]" href="#plan" style={{color: `#9ca3af`}}>The Plan</a>
+<a className="text-sm transition-colors tracking-tight hover:text-[#2563eb]" href="#roi" style={{color: `#9ca3af`}}>Your ROI</a>
+<a className="text-sm transition-colors tracking-tight hover:text-[#2563eb]" href="#investment" style={{color: `#9ca3af`}}>Investment</a>
+<a className="inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm transition-colors border-white/10 text-white hover:bg-[#1d4ed8]" data-approve="" href="#steps" style={{backgroundColor: `#2563eb`}}>
+<svg className="lucide lucide-check-circle-2 h-4 w-4" data-lucide="check-circle-2" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12"></circle><path></path></svg>
+            Approve Phase 1
+          </a>
+</div>
+<div className="md:hidden">
+<a className="inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm transition-colors border-white/10 text-white hover:bg-[#1d4ed8]" data-approve="" href="#steps" style={{backgroundColor: `#2563eb`}}>
+<svg className="lucide lucide-check-circle-2 h-4 w-4" data-lucide="check-circle-2" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12"></circle><path></path></svg>
+            Approve
+          </a>
+</div>
+</nav>
+</header>
+
+<section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-10 animate-[slideUp_0.7s_ease-out_both]">
+<div className="relative overflow-hidden rounded-3xl border ring-1 border-white/10 ring-white/5 bg-[#1f2937]">
+
+<div className="absolute inset-0 opacity-30">
+<div className="absolute inset-0 bg-[radial-gradient(1200px_400px_at_20%_-10%,rgba(37,99,235,0.15),transparent),radial-gradient(800px_300px_at_80%_120%,rgba(37,99,235,0.12),transparent)]"></div>
+<div className="absolute inset-0" style={{backgroundImage: `linear-gradient( rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px )`, backgroundSize: `28px 28px`}}></div>
+</div>
+<div className="relative sm:p-10 lg:p-16 bg-slate-700/60 pt-6 pr-6 pb-6 pl-6">
+<div className="flex flex-col gap-6">
+<h1 className="text-4xl sm:text-6xl lg:text-7xl font-light tracking-tighter text-white">A Partnership for <span className="underline decoration-2 underline-offset-8" style={{textDecorationColor: `#f59e0b`}}>Predictable Growth</span></h1>
+<p className="text-base sm:text-lg tracking-tight" style={{color: `#9ca3af`}}>A Strategic Proposal for Pastor Patrick & Jasmine Ford</p>
+<p className="text-sm sm:text-base leading-7 max-w-3xl" style={{color: `#e5e7eb`}}>
+              Thank you for your transparency. You’ve built TKC on faith, excellence, and referrals. Now, you’re ready for the next step: a system that creates predictable, scalable growth. This plan is designed to deliver on the one metric that matters most: qualified leads in your inbox that you can turn into sales.
+            </p>
+<div className="flex gap-3 pt-2 items-center" id="aura-emf7rj2kf">
+<a className="inline-flex items-center gap-2 ring-1 ring-inset transition-colors hover:bg-[#1d4ed8] text-sm text-white tracking-tight rounded-full pt-2.5 pr-5 pb-2.5 pl-5" href="#plan" id="aura-emf7rfrzl" onClick={(e) => { event.preventDefault();var t=document.querySelector('#plan');if(t){t.scrollIntoView({behavior:'smooth',block:'start'});}else{location.hash='#plan';} }} style={{backgroundColor: `#2563eb`, ringColor: `rgba(37,99,235,0.35)`}}>
+                
+                See the Roadmap
+              <svg className="lucide lucide-route h-4 w-4" data-lucide="route" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="19"></circle><path></path><circle cx="18" cy="5"></circle></svg></a>
+<a className="inline-flex items-center gap-2 rounded-full text-sm tracking-tight px-5 py-2.5 ring-1 ring-inset transition-colors hover:text-[#2563eb]" href="#roi" style={{backgroundColor: `transparent`, color: `#e5e7eb`, borderColor: `rgba(255,255,255,0.10)`}}>
+<svg className="lucide lucide-chart-line h-4 w-4" data-lucide="chart-line" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+                Your ROI
+              </a>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16">
+<div className="sm:p-10 bg-[#1f2937]/60 border-white/10 border rounded-3xl pt-6 pr-6 pb-6 pl-6">
+<div className="animate-[slideUp_0.7s_ease-out_0.1s_both] text-center">
+<h2 className="sm:text-5xl text-3xl font-light text-white tracking-tighter">What We’re <span className="underline decoration-2 underline-offset-8" style={{textDecorationColor: `#f59e0b`}}>Solving</span> For</h2>
+<p className="mt-3 text-sm sm:text-base max-w-2xl mx-auto" style={{color: `#9ca3af`}}>Four focus points aligned to the outcomes TKC values most.</p>
+</div>
+<div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+
+<div className="animate-[slideUp_0.7s_ease-out_0.15s_both] rounded-2xl border p-5 sm:p-6 border-white/10 bg-[#1f2937]">
+<div className="flex items-start gap-3">
+<div className="h-9 w-9 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: `rgba(37,99,235,0.15)`, color: `#2563eb`, ringColor: `rgba(37,99,235,0.20)`}}>
+<svg className="lucide lucide-goal h-5 w-5" data-lucide="goal" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path></svg>
+</div>
+<div className="">
+<h3 className="text-lg font-medium tracking-tight text-white">The Goal</h3>
+<p className="mt-1.5 text-sm" style={{color: `#e5e7eb`}}>Generate 2+ additional installs per month to provide stability for hiring full-time installers.</p>
+</div>
+</div>
+</div>
+
+<div className="animate-[slideUp_0.7s_ease-out_0.2s_both] rounded-2xl border p-5 sm:p-6 border-white/10 bg-[#1f2937]">
+<div className="flex items-start gap-3">
+<div className="h-9 w-9 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: `rgba(37,99,235,0.15)`, color: `#2563eb`, ringColor: `rgba(37,99,235,0.20)`}}>
+<svg className="lucide lucide-trending-up h-5 w-5" data-lucide="trending-up" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</div>
+<div className="">
+<h3 className="text-lg font-medium tracking-tight text-white">The Opportunity</h3>
+<p className="mt-1.5 text-sm" style={{color: `#e5e7eb`}}>Leverage your exceptional 80% close rate by feeding your pipeline with qualified, targeted leads.</p>
+</div>
+</div>
+</div>
+
+<div className="animate-[slideUp_0.7s_ease-out_0.25s_both] rounded-2xl border p-5 sm:p-6 border-white/10 bg-[#1f2937]">
+<div className="flex items-start gap-3">
+<div className="h-9 w-9 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: `rgba(37,99,235,0.15)`, color: `#2563eb`, ringColor: `rgba(37,99,235,0.20)`}}>
+<svg className="lucide lucide-inbox h-5 w-5" data-lucide="inbox" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path></path></svg>
+</div>
+<div className="">
+<h3 className="text-lg font-medium tracking-tight text-white">The Need</h3>
+<p className="mt-1.5 text-sm" style={{color: `#e5e7eb`}}>A practical, done-for-you system that delivers tangible results, not vanity metrics like traffic or followers.</p>
+</div>
+</div>
+</div>
+
+<div className="animate-[slideUp_0.7s_ease-out_0.3s_both] rounded-2xl border p-5 sm:p-6 border-white/10 bg-[#1f2937]">
+<div className="flex items-start gap-3">
+<div className="h-9 w-9 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: `rgba(245,158,11,0.15)`, color: `#f59e0b`, ringColor: `rgba(245,158,11,0.20)`}}>
+<svg className="lucide lucide-binoculars h-5 w-5" data-lucide="binoculars" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><path></path><path></path><path></path></svg>
+</div>
+<div className="">
+<h3 className="text-lg font-medium tracking-tight text-white">The Vision</h3>
+<p className="mt-1.5 text-sm" style={{color: `#e5e7eb`}}>Establish TKC as the household name for transformative LED video walls — first in DFW, then nationwide.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="scroll-mt-24 max-w-6xl sm:px-6 lg:px-8 sm:mt-16 mt-12 mr-auto ml-auto pr-4 pl-4" id="plan">
+<div className="animate-[slideUp_0.7s_ease-out_0.05s_both] text-center">
+<h2 className="sm:text-5xl text-3xl font-light text-white tracking-tighter" id="aura-emf7rgc87">The <span className="underline decoration-2 underline-offset-8" id="aura-emf7rgcm6" style={{textDecorationColor: `#f59e0b`}}>Roadmap</span>: Prove, Then <span className="underline decoration-2 underline-offset-8" style={{textDecorationColor: `#f59e0b`}}>Scale</span></h2>
+<p className="mt-3 text-sm sm:text-base max-w-2xl mx-auto" style={{color: `#9ca3af`}}>Three focused phases to validate, expand, and scale.</p>
+</div>
+<div className="relative mt-10">
+
+<div className="absolute left-8 top-0 bottom-0 hidden md:block">
+<div className="h-full w-px bg-gradient-to-b from-transparent to-transparent via-white/10"></div>
+</div>
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+
+<article className="animate-[slideUp_0.7s_ease-out_0.1s_both] bg-[#1f2937]/60 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6">
+<div className="flex items-center justify-between">
+<span className="inline-flex h-8 w-8 items-center justify-center rounded-full text-sm text-white" style={{backgroundColor: `#2563eb`}}>1</span>
+<span className="text-xs" style={{color: `#9ca3af`}}>Months 1–2</span>
+</div>
+<h3 className="mt-4 text-xl font-medium tracking-tight text-white">Phase 1 – Foundation</h3>
+<p className="mt-1 text-sm" style={{color: `#9ca3af`}}>Focus avatar: <span className="text-white">“Deacon Davis”</span></p>
+<ul className="mt-4 space-y-2 text-sm">
+<li className="flex items-center gap-2"><svg className="lucide lucide-settings h-4 w-4" data-lucide="settings" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: `#2563eb`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><circle cx="12" cy="12"></circle></svg> GoHighLevel CRM Setup</li>
+<li className="flex items-center gap-2"><svg className="lucide lucide-funnel h-4 w-4" data-lucide="funnel" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: `#2563eb`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg> “Get a Quote” Funnel</li>
+<li className="flex items-center gap-2"><svg className="lucide lucide-megaphone h-4 w-4" data-lucide="megaphone" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: `#2563eb`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path></svg> Meta Ad Campaign</li>
+<li className="flex items-center gap-2"><svg className="lucide lucide-notebook-tabs h-4 w-4" data-lucide="notebook-tabs" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: `#2563eb`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><path></path><rect height="20" rx="2" width="16"></rect><path></path><path></path><path></path><path></path></svg> Notion Workspace</li>
+</ul>
+<div className="mt-4 rounded-lg border p-4 text-sm" style={{borderColor: `rgba(37,99,235,0.30)`, backgroundColor: `rgba(37,99,235,0.10)`, color: `#c7d2fe`}}>
+              Our immediate priority is to build the machine that captures new business.
+            </div>
+</article>
+
+<article className="animate-[slideUp_0.7s_ease-out_0.15s_both] bg-[#1f2937]/60 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6">
+<div className="flex items-center justify-between">
+<span className="inline-flex h-8 w-8 items-center justify-center rounded-full text-sm text-white" style={{backgroundColor: `#2563eb`}}>2</span>
+<span className="text-xs" style={{color: `#9ca3af`}}>Months 3–6</span>
+</div>
+<h3 className="mt-4 text-xl font-medium tracking-tight text-white">Phase 2 – Expansion</h3>
+<p className="mt-1 text-sm" style={{color: `#9ca3af`}}>Focus persona: <span className="text-white">“David” (Business) + Hospitality vertical</span></p>
+<ul className="mt-4 space-y-2 text-sm">
+<li className="flex items-center gap-2"><svg className="lucide lucide-target h-4 w-4" data-lucide="target" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: `#2563eb`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12"></circle><circle cx="12" cy="12"></circle><circle cx="12" cy="12"></circle></svg> Broaden targeting segments</li>
+<li className="flex items-center gap-2"><svg className="lucide lucide-layout-dashboard h-4 w-4" data-lucide="layout-dashboard" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: `#2563eb`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><rect height="9" rx="1" width="7"></rect><rect height="5" rx="1" width="7"></rect><rect height="9" rx="1" width="7"></rect><rect height="5" rx="1" width="7"></rect></svg> Creative + offer testing</li>
+<li className="flex items-center gap-2"><svg className="lucide lucide-layers h-4 w-4" data-lucide="layers" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: `#2563eb`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path></svg> Retargeting & nurture flows</li>
+</ul>
+<div className="mt-4 rounded-lg border p-4 text-sm" style={{borderColor: `rgba(255,255,255,0.10)`, backgroundColor: `rgba(255,255,255,0.05)`, color: `#e5e7eb`}}>
+              Each new install represents <span style={{color: `#2563eb`}}>$25k+</span> per deal, compounding the ROI.
+            </div>
+</article>
+
+<article className="animate-[slideUp_0.7s_ease-out_0.2s_both] bg-[#1f2937]/60 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6">
+<div className="flex items-center justify-between">
+<span className="inline-flex h-8 w-8 items-center justify-center rounded-full text-sm text-white" style={{backgroundColor: `#2563eb`}}>3</span>
+<span className="text-xs" style={{color: `#9ca3af`}}>Months 6+</span>
+</div>
+<h3 className="mt-4 text-xl font-medium tracking-tight text-white">Phase 3 – Growth</h3>
+<ul className="mt-4 space-y-2 text-sm">
+<li className="flex items-center gap-2"><svg className="lucide lucide-repeat h-4 w-4" data-lucide="repeat" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: `#2563eb`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><path></path></svg> Rental Revenue Stream</li>
+<li className="flex items-center gap-2"><svg className="lucide lucide-bot h-4 w-4" data-lucide="bot" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: `#2563eb`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><rect height="12" rx="2" width="16"></rect><path></path><path></path><path></path><path></path></svg> AI-Powered Lead Qualification</li>
+<li className="flex items-center gap-2"><svg className="lucide lucide-sparkles h-4 w-4" data-lucide="sparkles" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: `#2563eb`}} viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><circle cx="4" cy="20"></circle></svg> Scale winning campaigns</li>
+</ul>
+<div className="mt-4 rounded-lg border p-4 text-sm" style={{borderColor: `rgba(37,99,235,0.30)`, backgroundColor: `rgba(37,99,235,0.10)`, color: `#c7d2fe`}}>
+              Rentals create recurring revenue while sales deliver big-ticket installs.
+            </div>
+</article>
+</div>
+</div>
+</section>
+
+<section className="scroll-mt-24 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16" id="roi">
+<div className="animate-[slideUp_0.7s_ease-out_both] sm:p-10 bg-[#1f2937]/60 border-white/10 border rounded-3xl pt-6 pr-6 pb-6 pl-6">
+<div className="text-center">
+<h2 className="text-3xl sm:text-5xl font-light tracking-tighter text-white">A Clear Path to <span className="underline decoration-2 underline-offset-8" style={{textDecorationColor: `#f59e0b`}}>Profitability</span></h2>
+<p className="mt-3 text-sm sm:text-base" style={{color: `#9ca3af`}}>High-impact clarity on value, goals, and the test investment.</p>
+</div>
+<div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+<div className="text-center bg-[#1f2937]/80 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6">
+<div className="text-sm" style={{color: `#9ca3af`}}>Average Deal Value</div>
+<div className="mt-2 text-3xl sm:text-4xl font-medium tracking-tight" style={{color: `#2563eb`}}>~$25,000</div>
+</div>
+<div className="text-center bg-[#1f2937]/80 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6">
+<div className="text-sm" style={{color: `#9ca3af`}}>Your Goal</div>
+<div className="mt-2 text-3xl sm:text-4xl font-medium tracking-tight" style={{color: `#2563eb`}}>$50,000 New Monthly Revenue</div>
+</div>
+<div className="text-center bg-[#1f2937]/80 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6">
+<div className="text-sm" style={{color: `#9ca3af`}}>Phase 1 Investment</div>
+<div className="mt-2 text-3xl sm:text-4xl font-medium tracking-tight" style={{color: `#2563eb`}}>$3,000 Total</div>
+</div>
+</div>
+
+<div className="sm:p-6 animate-[slideUp_0.7s_ease-out_0.05s_both] bg-[#1f2937]/80 border-white/10 border rounded-2xl mt-8 pt-5 pr-5 pb-5 pl-5">
+<div className="flex items-center justify-between gap-3">
+<div className="flex items-center gap-2">
+<div className="h-8 w-8 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: `rgba(37,99,235,0.15)`, color: `#2563eb`, ringColor: `rgba(37,99,235,0.20)`}}>
+<svg className="lucide lucide-sliders-horizontal h-4 w-4" data-lucide="sliders-horizontal" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><line></line><line></line><line></line><line></line><line></line><line></line><line></line><line></line><line></line></svg>
+</div>
+<div className="">
+<p className="text-sm" style={{color: `#9ca3af`}}>Adjust expected installs per month</p>
+<h3 className="text-lg font-medium tracking-tight text-white">Projected Impact</h3>
+</div>
+</div>
+<div className="text-right">
+<div className="text-xs" style={{color: `#9ca3af`}}>Installs / month</div>
+<div className="text-xl font-medium tracking-tight" id="roiDealsLabel" style={{color: `#2563eb`}}>2</div>
+</div>
+</div>
+
+<div className="mt-5">
+<div className="relative h-8">
+
+<div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-2 rounded-full bg-white/10 ring-1 ring-inset ring-white/10"></div>
+
+<div className="absolute left-0 top-1/2 -translate-y-1/2 h-2 shadow-[0_0_0_1px_rgba(37,99,235,0.35)] rounded-full" id="roiFill" style={{width: `33.3333%`, backgroundColor: `rgb(37, 99, 235)`}}></div>
+
+<div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-4 w-4 rounded-full bg-white shadow-md transition-transform duration-200" id="roiKnob" style={{left: `33.3333%`}}></div>
+
+<input className="absolute inset-0 w-full h-8 appearance-none cursor-pointer bg-transparent" id="roiDeals" max="6" min="0" step="1" type="range" value="2" />
+</div>
+<div className="mt-2 flex items-center justify-between text-[11px]" style={{color: `#9ca3af`}}>
+<span>0</span>
+<span>6</span>
+</div>
+</div>
+
+<div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+<div className="rounded-xl border p-4 border-white/10 bg-[#1f2937]">
+<div className="text-xs" style={{color: `#9ca3af`}}>Projected Monthly Revenue</div>
+<div className="mt-1 text-2xl font-medium tracking-tight" id="roiRevenue" style={{color: `#e5e7eb`}}>$50,000</div>
+</div>
+<div className="rounded-xl border p-4 border-white/10 bg-[#1f2937]">
+<div className="text-xs" style={{color: `#9ca3af`}}>ROI on Test (2-month total $3,000)</div>
+<div className="mt-1 text-2xl font-medium tracking-tight" id="roiMultiple" style={{color: `#e5e7eb`}}>16.7×</div>
+</div>
+</div>
+</div>
+<div className="sm:p-6 border rounded-2xl mt-8 pt-5 pr-5 pb-5 pl-5" style={{borderColor: `rgba(37,99,235,0.30)`, backgroundColor: `rgba(37,99,235,0.10)`}}>
+<p className="text-sm sm:text-base" style={{color: `#c7d2fe`}}>
+<span className="font-semibold text-white">One closed deal pays for Phase 1 more than 8x over.</span> Two deals = <span className="font-semibold text-white">$50,000</span> return on a <span className="font-semibold text-white">$3,000</span> test.
+          </p>
+</div>
+</div>
+</section>
+
+
+<section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16">
+<div className="animate-[slideUp_0.7s_ease-out_both] text-center">
+<h2 className="sm:text-5xl text-3xl font-light text-white tracking-tighter">Our Partnership Guarantee</h2>
+<p className="mt-3 text-sm sm:text-base" style={{color: `#9ca3af`}}>Aligned incentives, full transparency, and accountable execution.</p>
+</div>
+<div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+
+<div className="bg-[#1f2937]/60 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6">
+<div className="h-10 w-10 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: `rgba(37,99,235,0.15)`, color: `#2563eb`, ringColor: `rgba(37,99,235,0.20)`}}>
+<svg className="lucide lucide-calendar-check h-5 w-5" data-lucide="calendar-check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><rect height="18" rx="2" width="18"></rect><path></path><path></path></svg>
+</div>
+<h3 className="mt-4 text-lg font-medium tracking-tight text-white">Checkpoints</h3>
+<p className="mt-1.5 text-sm" style={{color: `#e5e7eb`}}>Weekly Checkpoints for campaign reviews and next steps.</p>
+</div>
+
+<div className="bg-[#1f2937]/60 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6">
+<div className="h-10 w-10 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: `rgba(37,99,235,0.15)`, color: `#2563eb`, ringColor: `rgba(37,99,235,0.20)`}}>
+<svg className="lucide lucide-gauge h-5 w-5" data-lucide="gauge" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</div>
+<h3 className="mt-4 text-lg font-medium tracking-tight text-white">Transparency</h3>
+<p className="mt-1.5 text-sm" style={{color: `#e5e7eb`}}>24/7 Transparency via a shared Notion workspace with live reporting.</p>
+</div>
+
+<div className="ring-1 ring-inset bg-[#1f2937]/60 rounded-2xl pt-6 pr-6 pb-6 pl-6" style={{border: `1px solid #f59e0b`, ringColor: `rgba(245,158,11,0.30)`}}>
+<div className="h-10 w-10 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: `rgba(245,158,11,0.15)`, color: `#f59e0b`, ringColor: `rgba(245,158,11,0.20)`}}>
+<svg className="lucide lucide-shield-check h-5 w-5" data-lucide="shield-check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</div>
+<h3 className="mt-4 text-lg font-medium tracking-tight text-white">Risk Reversal</h3>
+<p className="mt-1.5 text-sm" style={{color: `#e5e7eb`}}>If your inbox does not receive qualified leads within 60 days, 50% of the onboarding fee ($750) is credited toward future work.</p>
+</div>
+</div>
+</section>
+
+<section className="scroll-mt-24 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16 mb-16" id="steps">
+<div className="animate-[slideUp_0.7s_ease-out_both] sm:p-10 bg-[#1f2937]/60 border-white/10 border rounded-3xl pt-6 pr-6 pb-6 pl-6">
+<div className="text-center">
+<h2 className="text-3xl sm:text-5xl font-light tracking-tighter text-white">Let's Begin</h2>
+<p className="mt-3 text-sm sm:text-base" style={{color: `#9ca3af`}}>Three simple steps to launch the growth engine.</p>
+</div>
+<ol className="mt-8 space-y-3">
+<li className="flex items-start gap-3 text-sm sm:text-base">
+<span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs text-white" style={{backgroundColor: `#2563eb`}}>1</span>
+            Approve the Phase 1 plan.
+          </li>
+<li className="flex items-start gap-3 text-sm sm:text-base">
+<span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs text-white" style={{backgroundColor: `#2563eb`}}>2</span>
+            Sign the agreement + pay the onboarding fee.
+          </li>
+<li className="flex items-start gap-3 text-sm sm:text-base">
+<span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs text-white" style={{backgroundColor: `#2563eb`}}>3</span>
+            Schedule the kickoff call.
+          </li>
+</ol>
+<div className="mt-8 rounded-2xl border p-5 sm:p-6 border-white/10" style={{backgroundColor: `rgba(255,255,255,0.05)`}}>
+<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+<div className="space-y-2">
+<p className="text-sm sm:text-base">
+                👉 <span className="font-semibold">Within 3 weeks:</span> qualified leads hitting your inbox.
+              </p>
+<p className="text-sm sm:text-base">
+                👉 <span className="font-semibold">Within 60 days:</span> clear, data-backed proof of a predictable growth engine.
+              </p>
+</div>
+<a className="inline-flex items-center gap-2 rounded-full text-sm tracking-tight px-5 py-3 ring-1 ring-inset transition-colors text-white hover:bg-[#1d4ed8]" data-approve="" href="#steps" style={{backgroundColor: `#2563eb`, ringColor: `rgba(37,99,235,0.35)`}}>
+<svg className="lucide lucide-handshake h-5 w-5" data-lucide="handshake" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><path></path><path></path></svg>
+              Approve Phase 1 & Begin Our Partnership
+            </a>
+</div>
+</div>
+</div>
+</section>
+
+<section className="scroll-mt-24 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16 mb-16" id="thank-you">
+<div className="sm:p-10 bg-[#1f2937]/60 border-white/10 border rounded-3xl pt-6 pr-6 pb-6 pl-6">
+<div className="text-center">
+<div className="inline-flex h-12 w-12 items-center justify-center rounded-xl ring-1" style={{backgroundColor: `rgba(37,99,235,0.15)`, color: `#60a5fa`, ringColor: `rgba(37,99,235,0.25)`}}>
+<svg className="lucide lucide-mail-check h-6 w-6" data-lucide="mail-check" fill="none" height="28" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path></svg>
+</div>
+<h2 className="mt-5 text-3xl sm:text-5xl font-light tracking-tighter text-white">Thank you for approving Phase 1</h2>
+<p className="mt-3 text-sm sm:text-base" style={{color: `#9ca3af`}}>We’ll reach out shortly with next steps and scheduling details.</p>
+<div className="mt-6 mx-auto max-w-xl rounded-xl border border-white/10 bg-[#111827] p-5 text-sm" style={{color: `#e5e7eb`}}>
+            A confirmation has been sent to our team. If you need immediate assistance, email <a className="underline decoration-2 underline-offset-4" href="mailto:rocha@yahwaylove.com" style={{textDecorationColor: `#2563eb`, color: `#93c5fd`}}>rocha@yahwaylove.com</a>.
+          </div>
+<div className="mt-8">
+<a className="inline-flex items-center gap-2 rounded-full text-sm tracking-tight px-5 py-2.5 ring-1 ring-inset transition-colors hover:text-[#2563eb]" href="#plan" style={{backgroundColor: `transparent`, color: `#e5e7eb`, borderColor: `rgba(255,255,255,0.10)`}}>
+              Back to Roadmap
+            </a>
+</div>
+</div>
+</div>
+</section>
+
+<footer className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mb-10">
+<div className="rounded-2xl border px-5 py-4 flex flex-col sm:flex-row items-center justify-between border-white/10 bg-[#1f2937]">
+<p className="text-sm tracking-tight" style={{color: `#e5e7eb`}}>TKC & Rootmosaic: A Partnership for Predictable Growth</p>
+<div className="mt-2 sm:mt-0 flex items-center gap-4">
+<a className="text-sm transition-colors tracking-tight hover:text-[#2563eb]" href="#plan" style={{color: `#9ca3af`}}>The Plan</a>
+<a className="text-sm transition-colors tracking-tight hover:text-[#2563eb]" href="#roi" style={{color: `#9ca3af`}}>Your ROI</a>
+<a className="text-sm transition-colors tracking-tight hover:text-[#2563eb]" href="#investment" style={{color: `#9ca3af`}}>Investment</a>
+<a className="text-sm transition-colors tracking-tight hover:text-[#2563eb]" href="#steps" style={{color: `#9ca3af`}}>Next Steps</a>
+</div>
+</div>
+</footer>
+
+<canvas className="pointer-events-none fixed inset-0 z-[60] hidden" id="confetti-canvas"></canvas>
+<div className="fixed inset-0 z-[60] hidden" id="approveOverlay">
+<div className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-200 opacity-0" id="approveBackdrop"></div>
+<div className="absolute inset-0 flex items-end sm:items-center justify-center p-4">
+<div aria-labelledby="approveTitle" aria-modal="true" className="w-full sm:max-w-md rounded-2xl bg-[#111827] border border-white/10 shadow-2xl p-6 sm:p-7 transform transition-all duration-200 opacity-0 translate-y-6 sm:translate-y-0 sm:scale-95" id="approveDialog" role="dialog">
+<button aria-label="Close dialog" className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-md text-white/70 hover:text-white hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#2563eb]/50 transition" id="approveClose" type="button">
+<svg className="lucide lucide-x h-4.5 w-4.5" data-lucide="x" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</button>
+<div className="flex items-center gap-3">
+<div className="h-10 w-10 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: `rgba(37,99,235,0.15)`, color: `#60a5fa`, ringColor: `rgba(37,99,235,0.25)`}}>
+<svg className="lucide lucide-party-popper h-5 w-5" data-lucide="party-popper" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><path></path><path></path><path></path><path></path><path></path><path></path></svg>
+</div>
+<div>
+<h3 className="text-xl sm:text-2xl font-medium tracking-tight text-white" id="approveTitle">Thank you!</h3>
+<p className="mt-1.5 text-sm" style={{color: `#9ca3af`}}>Your approval has been noted. We’re kicking things off and will follow up with next steps shortly.</p>
+</div>
+</div>
+<div className="mt-5 rounded-lg border border-white/10 bg-[#0b1220] p-4 text-xs sm:text-sm" style={{color: `#e5e7eb`}}>
+            A confirmation email is being prepared for rocha@yahwaylove.com. If your mail app doesn’t open automatically, click the button below.
+          </div>
+<div className="mt-6 flex flex-col sm:flex-row gap-3">
+<a className="inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1d4ed8]" href="#" id="mailtoApprove" style={{backgroundColor: `#2563eb`}}>
+<svg className="lucide lucide-send h-4 w-4" data-lucide="send" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+              Send confirmation email
+            </a>
+<a className="inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium ring-1 ring-inset transition-colors hover:text-[#2563eb]" href="#thank-you" style={{borderColor: `rgba(255,255,255,0.10)`, color: `#e5e7eb`}}>
+              View confirmation section
+            </a>
+<button className="sm:ml-auto inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium text-white/90 hover:text-white ring-1 ring-inset ring-white/10 transition" id="approveDone" type="button">
+              Done
+            </button>
+</div>
+</div>
+</div>
+</div>
+
+
+
+    </>
+  );
+}

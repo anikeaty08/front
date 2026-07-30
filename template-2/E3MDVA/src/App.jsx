@@ -1,0 +1,302 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="w-full max-w-6xl bg-white rounded-lg shadow-xl overflow-hidden border border-gray-200">
+
+<div className="bg-gray-100 px-4 py-2 border-b border-gray-200 flex items-center">
+<div className="flex space-x-2 mr-4">
+<div className="w-3 h-3 rounded-full bg-red-500"></div>
+<div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+<div className="w-3 h-3 rounded-full bg-green-500"></div>
+</div>
+<div className="flex-1 flex justify-center">
+<div className="bg-gray-200 rounded-md py-1 px-3 text-xs text-gray-600 w-1/2 text-center">flux-mail.app</div>
+</div>
+</div>
+
+<div className="flex h-[650px]">
+
+<div className="w-64 bg-gray-50 border-r border-gray-200 flex flex-col">
+
+<div className="p-4 border-b border-gray-200">
+<div className="flex items-center">
+<div className="w-8 h-8 rounded-md bg-indigo-500 flex items-center justify-center text-white font-bold">F</div>
+<span className="ml-2 font-medium text-gray-800">Flux Mail</span>
+</div>
+</div>
+
+<nav className="flex-1 overflow-y-auto p-2">
+<div className="space-y-1">
+<a className="flex items-center px-3 py-2 rounded-md bg-indigo-50 text-indigo-700 group" href="#">
+<svg className="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+<span>Inbox</span>
+<span className="ml-auto bg-indigo-100 text-indigo-800 rounded-full px-2 py-0.5 text-xs">24</span>
+</a>
+<a className="flex items-center px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 group" href="#">
+<svg className="h-5 w-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+<span>Starred</span>
+</a>
+<a className="flex items-center px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 group" href="#">
+<svg className="h-5 w-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+<span>Snoozed</span>
+</a>
+<a className="flex items-center px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 group" href="#">
+<svg className="h-5 w-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+<span>Drafts</span>
+<span className="ml-auto bg-gray-200 text-gray-600 rounded-full px-2 py-0.5 text-xs">3</span>
+</a>
+<a className="flex items-center px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 group" href="#">
+<svg className="h-5 w-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+<span>Archive</span>
+</a>
+</div>
+<div className="mt-6 pt-4 border-t border-gray-200">
+<h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Labels</h3>
+<div className="mt-2 space-y-1">
+<a className="flex items-center px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-100" href="#">
+<span className="w-2 h-2 rounded-full bg-green-500 mr-3"></span>
+<span>Work</span>
+</a>
+<a className="flex items-center px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-100" href="#">
+<span className="w-2 h-2 rounded-full bg-blue-500 mr-3"></span>
+<span>Personal</span>
+</a>
+<a className="flex items-center px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-100" href="#">
+<span className="w-2 h-2 rounded-full bg-purple-500 mr-3"></span>
+<span>Projects</span>
+</a>
+</div>
+</div>
+</nav>
+
+<div className="p-3 border-t border-gray-200 flex items-center">
+<div className="w-8 h-8 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-600 font-medium">YN</div>
+<div className="ml-2">
+<div className="text-sm font-medium text-gray-800">Your Name</div>
+<div className="text-xs text-gray-500">your.email@example.com</div>
+</div>
+</div>
+</div>
+
+<div className="w-96 border-r border-gray-200 flex flex-col">
+
+<div className="p-3 border-b border-gray-200 flex">
+<div className="relative flex-1">
+<input className="w-full pl-9 pr-3 py-2 bg-gray-100 border-0 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Search emails..." type="text" />
+<svg className="h-4 w-4 text-gray-500 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</div>
+<button className="ml-2 p-2 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100">
+<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</button>
+</div>
+
+<div className="flex-1 overflow-y-auto">
+<div className="border-b border-gray-200 px-4 py-3 bg-white cursor-pointer hover:bg-gray-50">
+<div className="flex items-center mb-1">
+<span className="font-medium text-gray-900">Design Team</span>
+<span className="ml-auto text-xs text-gray-500">10:24 AM</span>
+</div>
+<div className="text-sm font-medium text-gray-900 mb-1 truncate">New website mockups</div>
+<div className="text-xs text-gray-500 truncate">Hey team, I've attached the latest mockups for the landing page redesign. Let me know what you think!</div>
+</div>
+<div className="border-b border-gray-200 px-4 py-3 bg-indigo-50 cursor-pointer">
+<div className="flex items-center mb-1">
+<span className="font-medium text-gray-900">Sarah Johnson</span>
+<span className="ml-auto text-xs text-gray-500">9:41 AM</span>
+</div>
+<div className="text-sm font-medium text-gray-900 mb-1 truncate">Project timeline update</div>
+<div className="text-xs text-gray-500 truncate">I've updated the project timeline to reflect the new requirements. The deadline has been extended by two weeks.</div>
+</div>
+<div className="border-b border-gray-200 px-4 py-3 bg-white cursor-pointer hover:bg-gray-50">
+<div className="flex items-center mb-1">
+<span className="font-medium text-gray-900">Alex Brown</span>
+<span className="ml-auto text-xs text-gray-500">Yesterday</span>
+</div>
+<div className="text-sm font-medium text-gray-900 mb-1 truncate">Meeting notes: Q3 Planning</div>
+<div className="text-xs text-gray-500 truncate">Attached are the notes from our Q3 planning session. Please review and provide feedback by Friday.</div>
+</div>
+<div className="border-b border-gray-200 px-4 py-3 bg-white cursor-pointer hover:bg-gray-50">
+<div className="flex items-center mb-1">
+<span className="font-medium text-gray-900">Product Updates</span>
+<span className="ml-auto text-xs text-gray-500">Yesterday</span>
+</div>
+<div className="text-sm font-medium text-gray-900 mb-1 truncate">New feature: Email templates</div>
+<div className="text-xs text-gray-500 truncate">We've launched email templates! Now you can create and save templates for your most common emails.</div>
+</div>
+<div className="border-b border-gray-200 px-4 py-3 bg-white cursor-pointer hover:bg-gray-50">
+<div className="flex items-center mb-1">
+<span className="font-medium text-gray-900">Michael Chen</span>
+<span className="ml-auto text-xs text-gray-500">May 12</span>
+</div>
+<div className="text-sm font-medium text-gray-900 mb-1 truncate">Feedback on your proposal</div>
+<div className="text-xs text-gray-500 truncate">I've reviewed your proposal and have some feedback. Overall it looks great, but I have a few suggestions.</div>
+</div>
+</div>
+</div>
+
+<div className="flex-1 flex flex-col">
+
+<div className="p-4 border-b border-gray-200">
+<div className="flex items-center justify-between mb-2">
+<h2 className="text-xl font-medium text-gray-900">Project timeline update</h2>
+<div className="flex space-x-2">
+<button className="p-1.5 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100">
+<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</button>
+<button className="p-1.5 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100">
+<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</button>
+<button className="p-1.5 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100">
+<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</button>
+</div>
+</div>
+<div className="flex items-center">
+<div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium">SJ</div>
+<div className="ml-3">
+<div className="flex items-center">
+<span className="font-medium text-gray-900">Sarah Johnson</span>
+<span className="ml-2 text-gray-500">{"<"}sarah.j@example.com{">"}</span>
+</div>
+<div className="flex items-center text-sm text-gray-500">
+<span>To: You and 5 others</span>
+<span className="ml-4">9:41 AM (2 hours ago)</span>
+</div>
+</div>
+</div>
+</div>
+
+<div className="flex-1 p-6 overflow-y-auto">
+<p className="text-gray-800 mb-4">Hi team,</p>
+<p className="text-gray-800 mb-4">I've updated the project timeline to reflect the new requirements we discussed in yesterday's meeting. The good news is that we've been able to extend the deadline by two weeks, which should give us enough time to implement all the requested features.</p>
+<p className="text-gray-800 mb-4">Here's a summary of the key changes:</p>
+<ul className="list-disc pl-5 mb-4 text-gray-800 space-y-1">
+<li>Design phase extended by 3 days</li>
+<li>Development sprint 1 now starts on June 15th</li>
+<li>Added an additional testing phase before final delivery</li>
+<li>Final delivery date moved to July 30th</li>
+</ul>
+<p className="text-gray-800 mb-4">You can find the detailed timeline in the attached PDF. Please review it and let me know if you have any concerns or if you need any clarification.</p>
+<p className="text-gray-800 mb-4">Also, we'll be having a quick sync-up meeting tomorrow at 10 AM to discuss these changes. Calendar invites have been sent.</p>
+<div className="border border-gray-200 rounded-lg p-3 mb-4 bg-gray-50 flex items-center">
+<div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center text-red-700">
+<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</div>
+<div className="ml-3">
+<div className="text-sm font-medium text-gray-900">ProjectTimeline_v2.pdf</div>
+<div className="text-xs text-gray-500">2.4 MB • Click to download</div>
+</div>
+</div>
+<p className="text-gray-800 mb-1">Thanks,</p>
+<p className="text-gray-800 mb-4">Sarah</p>
+</div>
+
+<div className="p-4 border-t border-gray-200">
+<div className="border border-gray-300 rounded-lg p-3 focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
+<div className="mb-2 text-sm text-gray-600">Reply to Sarah Johnson and 5 others</div>
+<div className="min-h-[100px] focus:outline-none" contenteditable="true"></div>
+<div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-200">
+<div className="flex space-x-2">
+<button className="p-2 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100">
+<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</button>
+<button className="p-2 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100">
+<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</button>
+</div>
+<button className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Send
+              </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    </>
+  );
+}

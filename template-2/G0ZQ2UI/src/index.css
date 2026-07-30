@@ -1,0 +1,89 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body, html {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #000;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            min-height: 100vh;
+            min-width: 100vw;
+        }
+        #shader-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: block;
+            z-index: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+        .viewfinder-grid {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+            background-size: 33.33% 33.33%;
+            opacity: 0.3;
+        }
+        .focus-ring {
+            animation: focus-pulse 2s ease-in-out infinite;
+            border: 2px solid #ea580c;
+        }
+        @keyframes focus-pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        .shutter-button {
+            background: radial-gradient(circle, #fff 30%, #ea580c 31%, #ea580c 70%, #fff 71%);
+            transition: all 0.1s ease;
+        }
+        .shutter-button:active {
+            transform: scale(0.95);
+            background: radial-gradient(circle, #fff 20%, #dc2626 21%, #dc2626 80%, #fff 81%);
+        }
+        .exposure-indicator {
+            background: linear-gradient(45deg, rgba(234, 88, 12, 0.8) 0%, rgba(251, 146, 60, 0.8) 100%);
+            backdrop-filter: blur(10px);
+        }
+        .camera-overlay {
+            background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.7) 100%);
+        }
+        .mode-selector {
+            backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .float-icon {
+            animation: float-gentle 3s ease-in-out infinite;
+        }
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-2px); }
+        }
+        .recording-dot {
+            animation: recording-blink 1s ease-in-out infinite;
+        }
+        @keyframes recording-blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+    
+
+
+      /* 3D Transform utilities */
+      .rotate-x-15 { --tw-rotate-x: 15deg; transform: translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0)) rotateX(var(--tw-rotate-x, 0)) rotateY(var(--tw-rotate-y, 0)) rotateZ(var(--tw-rotate-z, 0)) skewX(var(--tw-skew-x, 0)) skewY(var(--tw-skew-y, 0)) scaleX(var(--tw-scale-x, 1)) scaleY(var(--tw-scale-y, 1)) !important; }
+          .rotate-y-15 { --tw-rotate-y: 15deg; transform: translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0)) rotateX(var(--tw-rotate-x, 0)) rotateY(var(--tw-rotate-y, 0)) rotateZ(var(--tw-rotate-z, 0)) skewX(var(--tw-skew-x, 0)) skewY(var(--tw-skew-y, 0)) scaleX(var(--tw-scale-x, 1)) scaleY(var(--tw-scale-y, 1)) !important; }
+          .-rotate-y-15 { --tw-rotate-y: -15deg; transform: translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0)) rotateX(var(--tw-rotate-x, 0)) rotateY(var(--tw-rotate-y, 0)) rotateZ(var(--tw-rotate-z, 0)) skewX(var(--tw-skew-x, 0)) skewY(var(--tw-skew-y, 0)) scaleX(var(--tw-scale-x, 1)) scaleY(var(--tw-scale-y, 1)) !important; }
+          .rotate-z-15 { --tw-rotate-z: 15deg; transform: translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0)) rotateX(var(--tw-rotate-x, 0)) rotateY(var(--tw-rotate-y, 0)) rotateZ(var(--tw-rotate-z, 0)) skewX(var(--tw-skew-x, 0)) skewY(var(--tw-skew-y, 0)) scaleX(var(--tw-scale-x, 1)) scaleY(var(--tw-scale-y, 1)) !important; }
+          .perspective-distant { perspective: 1200px !important; }
+    

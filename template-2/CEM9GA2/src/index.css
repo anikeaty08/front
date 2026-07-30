@@ -1,0 +1,19 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+    .fade-up{opacity:0;animation:fadeUp .8s ease-out forwards;}
+  
+
+
+      body { font-family: 'Inter', sans-serif; }
+    

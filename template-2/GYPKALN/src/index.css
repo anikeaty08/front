@@ -1,0 +1,45 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+:root{
+--glacier-900:#1E4D82;
+--glacier-700:#2E7AC7;
+--glacier-500:#4CA0EA;
+--glacier-400:#7EB9F0;
+--glacier-200:#B5D2F0;
+--seafoam-300:#A8E0D6;
+--lilac-300:#D6CFF2;
+--sun-400:#FBE08A;
+--sun-300:#FFF3C4;
+--sun-200:#FFF7D6;
+--mist-100:#EDEFF4;
+--paper:#FBFAF9;
+--ink:#101418;
+--ink-70:rgba(16,20,24,.7);
+--ink-60:rgba(16,20,24,.6);
+}
+@keyframes maskReveal{
+0%{clip-path:inset(0 100% 0 0);opacity:0;transform:translateY(8px)}
+100%{clip-path:inset(0 0 0 0);opacity:1;transform:translateY(0)}
+}
+@keyframes fadeUp{
+0%{opacity:0;transform:translateY(6px)}
+100%{opacity:1;transform:translateY(0)}
+}
+@keyframes blurReveal{
+0%{opacity:0; transform:translateY(8px); filter:blur(8px) saturate(85%);}
+100%{opacity:1; transform:translateY(0); filter:blur(0) saturate(100%);}
+}
+@media (prefers-reduced-motion: reduce){
+.reveal,.fade-up{animation:none !important;opacity:1 !important;transform:none !important;clip-path:inset(0 0 0 0) !important}
+}
+

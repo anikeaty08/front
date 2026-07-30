@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        
+        .face-part { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .face-part:hover { transform: scale(1.05) rotate(2deg); }
+        .control-button { transition: all 0.2s ease; }
+        .control-button:hover { transform: translateY(-2px) scale(1.05); }
+        .animate-bounce-crazy { animation: bounceCrazy 0.8s infinite; }
+        .animate-wiggle-wild { animation: wiggleWild 1s ease-in-out infinite; }
+        .animate-shake { animation: shake 0.5s infinite; }
+        .animate-spin-slow { animation: spin 3s linear infinite; }
+        .animate-jello { animation: jello 2s infinite; }
+        @keyframes bounceCrazy { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-15px) rotate(180deg); } }
+        @keyframes wiggleWild { 0%, 100% { transform: rotate(-10deg) scale(1); } 25% { transform: rotate(10deg) scale(1.2); } 50% { transform: rotate(-5deg) scale(0.8); } 75% { transform: rotate(15deg) scale(1.1); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-5deg); } 75% { transform: translateX(5px) rotate(5deg); } }
+        @keyframes jello { 0%, 100% { transform: scale(1); } 30% { transform: scale(1.25, 0.75); } 40% { transform: scale(0.75, 1.25); } 50% { transform: scale(1.15, 0.85); } 65% { transform: scale(0.95, 1.05); } 75% { transform: scale(1.05, 0.95); } }
+        .face-container { background: radial-gradient(circle at 50% 50%, #fef3c7, #fde68a, #f59e0b); }
+        .crazy-shadow { box-shadow: 0 0 30px rgba(139, 69, 19, 0.5), 0 0 60px rgba(255, 0, 255, 0.3); }
+        .rainbow-text { background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff); -webkit-background-clip: text; background-clip: text; color: transparent; animation: rainbow 2s linear infinite; }
+        @keyframes rainbow { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+    
+
+
+      body { font-family: 'Inter', sans-serif; }
+    

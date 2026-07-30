@@ -1,0 +1,22 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f7fa;
+    }
+    .option-btn.selected {
+      background-color: #f0f4ff;
+      border-color: #6366f1;
+      color: #6366f1;
+    }
+  

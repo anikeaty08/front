@@ -1,0 +1,132 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        :root {
+            --backdrop: hsl(0 0% 60% / 0.12);
+            --radius: 14;
+            --border: 2;
+            --backup-border: var(--backdrop);
+            --size: 200;
+            --x: 0;
+            --y: 0;
+            --xp: 0;
+            --yp: 0;
+        }
+
+        .glow-card:nth-child(1) {
+            --base: 280;
+            --spread: 200;
+            --outer: 1;
+        }
+        .glow-card:nth-child(2) {
+            --base: 180;
+            --spread: 400;
+            --outer: 1;
+        }
+        .glow-card:nth-child(3) {
+            --base: 60;
+            --spread: 300;
+            --outer: 1;
+        }
+
+        .glow-card {
+            --border-size: calc(var(--border, 2) * 1px);
+            --spotlight-size: calc(var(--size, 150) * 1px);
+            --hue: calc(var(--base) + (var(--xp, 0) * var(--spread, 0)));
+            position: relative;
+            background-image: radial-gradient(
+                var(--spotlight-size) var(--spotlight-size) at
+                calc(var(--x, 0) * 1px)
+                calc(var(--y, 0) * 1px),
+                hsl(var(--hue, 210) calc(var(--saturation, 100) * 1%) calc(var(--lightness, 70) * 1%) / var(--bg-spot-opacity, 0.08)), transparent
+            );
+            background-color: var(--backdrop, transparent);
+            background-size: calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
+            background-position: 50% 50%;
+            background-attachment: fixed;
+            border: var(--border-size) solid var(--backup-border);
+            border-radius: calc(var(--radius) * 1px);
+            touch-action: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glow-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 2rem 4rem -1rem hsl(var(--hue) 50% 50% / 0.3);
+        }
+
+        .glow-card::before,
+        .glow-card::after {
+            pointer-events: none;
+            content: "";
+            position: absolute;
+            inset: calc(var(--border-size) * -1);
+            border: var(--border-size) solid transparent;
+            border-radius: calc(var(--radius) * 1px);
+            background-attachment: fixed;
+            background-size: calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+            mask: linear-gradient(transparent, transparent), linear-gradient(white, white);
+            mask-clip: padding-box, border-box;
+            mask-composite: intersect;
+        }
+
+        .glow-card::before {
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.75) calc(var(--spotlight-size) * 0.75) at
+                calc(var(--x, 0) * 1px)
+                calc(var(--y, 0) * 1px),
+                hsl(var(--hue, 210) calc(var(--saturation, 100) * 1%) calc(var(--lightness, 50) * 1%) / var(--border-spot-opacity, 0.8)), transparent 100%
+            );
+            filter: brightness(1.5);
+        }
+
+        .glow-card::after {
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.4) calc(var(--spotlight-size) * 0.4) at
+                calc(var(--x, 0) * 1px)
+                calc(var(--y, 0) * 1px),
+                hsl(0 100% 100% / var(--border-light-opacity, 0.6)), transparent 100%
+            );
+        }
+
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-animation:nth-child(2n) {
+            animation-delay: -2s;
+        }
+
+        .floating-animation:nth-child(3n) {
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .star-filled {
+            color: #fbbf24;
+        }
+
+        .quote-icon {
+            color: hsl(var(--hue) 70% 60%);
+            opacity: 0.6;
+        }
+    

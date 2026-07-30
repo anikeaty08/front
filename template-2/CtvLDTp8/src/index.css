@@ -1,0 +1,22 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .text-gradient {
+      background: linear-gradient(to right, #4F9DFF, #1FE3CF);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .bg-gradient {
+      background: linear-gradient(to right, #4F9DFF, #1FE3CF);
+    }
+  

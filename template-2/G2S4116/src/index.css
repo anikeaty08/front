@@ -1,0 +1,42 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    html { font-family: 'Inter',sans-serif; }
+    .fade-in { opacity: 0; transform: translateY(24px) scale(.98); animation: fadeInUp .8s cubic-bezier(.6,.06,.29,.99) forwards; }
+    .fade-in-blur { opacity: 0; filter: blur(8px); animation: fadeInBlur .8s cubic-bezier(.6,.06,.29,.99) forwards; }
+    .fade-in-delay-1 { animation-delay: .1s; }
+    .fade-in-delay-2 { animation-delay: .2s; }
+    .fade-in-delay-3 { animation-delay: .3s; }
+    .fade-in-delay-4 { animation-delay: .4s; }
+    .fade-in-delay-5 { animation-delay: .5s; }
+    .fade-in-delay-6 { animation-delay: .6s; }
+    .fade-in-delay-7 { animation-delay: .7s; }
+    .fade-in-delay-8 { animation-delay: .8s; }
+    .fade-in-delay-9 { animation-delay: .9s; }
+    @keyframes fadeInUp { to { opacity: 1; transform: none; } }
+    @keyframes fadeInBlur { to { opacity: 1; filter: blur(0); } }
+    .glass {
+      background: linear-gradient(135deg, rgba(30,41,59,.55) 80%, rgba(88,28,135,0.25));
+      backdrop-filter: blur(16px) saturate(120%);
+      -webkit-backdrop-filter: blur(16px) saturate(120%);
+      border: 1.5px solid rgba(120,120,180,0.13);
+      box-shadow: 0 6px 32px -4px rgba(8,8,16,0.16);
+    }
+    .glass-light {
+      background: linear-gradient(135deg, rgba(30,41,59,0.44) 90%, rgba(168,85,247,0.11));
+      backdrop-filter: blur(10px) saturate(120%);
+      -webkit-backdrop-filter: blur(10px) saturate(120%);
+      border: 1.5px solid rgba(90,90,140,0.10);
+      box-shadow: 0 4px 16px -4px rgba(8,8,16,0.16);
+    }
+    ::selection { background:#a78bfa22; }
+  

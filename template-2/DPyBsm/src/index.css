@@ -1,0 +1,39 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #d9d9d9;
+            overflow-x: hidden;
+        }
+        .gradient-text {
+            background: linear-gradient(180deg, rgba(255,255,255,0.8) 8.85%, rgba(255,255,255,1) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at 50% 0%, rgba(113, 61, 255, 0.2) 0%, rgba(113, 61, 255, 0) 100%),
+                        radial-gradient(circle at 0% 50%, rgba(3, 217, 103, 0.1) 0%, rgba(3, 217, 103, 0) 100%);
+        }
+        .brand-pill {
+            background-color: rgba(3, 217, 103, 0.032);
+        }
+        .btn-primary {
+            background-color: rgba(19, 21, 18, 1);
+            color: white;
+        }
+        .btn-secondary {
+            border: 2px solid #03d967;
+            color: #03d967;
+        }
+    

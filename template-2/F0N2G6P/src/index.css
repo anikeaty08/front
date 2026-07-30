@@ -1,0 +1,19 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body, .geist {
+      font-family: 'Geist', system-ui, sans-serif;
+    }
+    .geist-mono {
+      font-family: 'Geist Mono', 'Fira Mono', 'Menlo', monospace;
+    }
+  

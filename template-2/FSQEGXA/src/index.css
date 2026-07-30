@@ -1,0 +1,35 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+/* Minimal keyframes for subtle staged reveals and section transitions */
+@keyframes fadeInUp {
+0% { opacity:0; transform: translateY(20px); filter: blur(6px); }
+100% { opacity:1; transform: translateY(0); filter: blur(0); }
+}
+@keyframes fadeIn {
+0% { opacity:0; filter: blur(4px); }
+100% { opacity:1; filter: blur(0); }
+}
+@keyframes slideInX {
+0% { opacity:0; transform: translateX(16px); }
+100% { opacity:1; transform: translateX(0); }
+}
+@keyframes slightFloat {
+0%,100% { transform: translateY(0); }
+50% { transform: translateY(-4px); }
+}
+@keyframes pulseSoft {
+0% { transform: scale(1); opacity: .6; }
+50% { transform: scale(1.06); opacity: 1; }
+100% { transform: scale(1); opacity: .6; }
+}
+

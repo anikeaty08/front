@@ -1,0 +1,362 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000, 0);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // Binary digits array
+        const binaryDigits = [];
+        const digitCount = 200;
+        let onesCount = 0;
+        let zerosCount = 0;
+
+        // Create text geometries for 0 and 1
+        function createTextGeometry(text, color) {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = 64;
+            canvas.height = 64;
+            
+            context.fillStyle = color;
+            context.font = 'bold 48px monospace';
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.fillText(text, 32, 32);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            const material = new THREE.SpriteMaterial({ 
+                map: texture, 
+                transparent: true,
+                opacity: 0.8
+            });
+            
+            return material;
+        }
+
+        // Materials for 1 and 0
+        const oneMaterial = createTextGeometry('1', '#10b981'); // emerald
+        const zeroMaterial = createTextGeometry('0', '#06b6d4'); // cyan
+
+        // Function to create binary digits
+        function createBinaryDigits() {
+            // Clear existing digits
+            binaryDigits.forEach(digit => {
+                scene.remove(digit.sprite);
+            });
+            binaryDigits.length = 0;
+            onesCount = 0;
+            zerosCount = 0;
+
+            for (let i = 0; i < digitCount; i++) {
+                const isOne = Math.random() > 0.5;
+                const material = isOne ? oneMaterial : zeroMaterial;
+                const sprite = new THREE.Sprite(material);
+                
+                // Random position in 3D space
+                sprite.position.set(
+                    (Math.random() - 0.5) * 100,
+                    (Math.random() - 0.5) * 100,
+                    (Math.random() - 0.5) * 100
+                );
+                
+                // Random scale
+                const scale = Math.random() * 3 + 1;
+                sprite.scale.set(scale, scale, 1);
+                
+                scene.add(sprite);
+                
+                binaryDigits.push({
+                    sprite: sprite,
+                    isOne: isOne,
+                    velocity: new THREE.Vector3(
+                        (Math.random() - 0.5) * 0.1,
+                        (Math.random() - 0.5) * 0.1,
+                        (Math.random() - 0.5) * 0.1
+                    ),
+                    rotationSpeed: (Math.random() - 0.5) * 0.02
+                });
+
+                if (isOne) onesCount++;
+                else zerosCount++;
+            }
+
+            // Update counters
+            document.getElementById('onesCount').textContent = onesCount;
+            document.getElementById('zerosCount').textContent = zerosCount;
+        }
+
+        // Create initial digits
+        createBinaryDigits();
+
+        // Camera position
+        camera.position.z = 50;
+
+        // Mouse controls
+        let mouseX = 0, mouseY = 0;
+        let targetRotationX = 0, targetRotationY = 0;
+        let rotationX = 0, rotationY = 0;
+        let isMouseDown = false;
+
+        document.addEventListener('mousedown', () => { isMouseDown = true; });
+        document.addEventListener('mouseup', () => { isMouseDown = false; });
+
+        document.addEventListener('mousemove', (event) => {
+            if (isMouseDown) {
+                mouseX = (event.clientX - window.innerWidth / 2) / 100;
+                mouseY = (event.clientY - window.innerHeight / 2) / 100;
+                targetRotationX = mouseY * 0.5;
+                targetRotationY = mouseX * 0.5;
+            }
+        });
+
+        // Keyboard controls
+        document.addEventListener('keydown', (event) => {
+            switch(event.code) {
+                case 'ArrowUp':
+                    camera.position.z = Math.max(camera.position.z - 5, 10);
+                    break;
+                case 'ArrowDown':
+                    camera.position.z = Math.min(camera.position.z + 5, 200);
+                    break;
+                case 'Space':
+                    event.preventDefault();
+                    createBinaryDigits();
+                    break;
+            }
+        });
+
+        // Scroll zoom
+        document.addEventListener('wheel', (event) => {
+            camera.position.z += event.deltaY * 0.1;
+            camera.position.z = Math.max(10, Math.min(200, camera.position.z));
+        });
+
+        // Animation loop
+        let frameCount = 0;
+        let lastTime = performance.now();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            frameCount++;
+            const currentTime = performance.now();
+            
+            // Update FPS counter every 60 frames
+            if (frameCount % 60 === 0) {
+                const fps = Math.round(1000 / ((currentTime - lastTime) / 60));
+                document.getElementById('fpsCounter').textContent = Math.min(fps, 60);
+                lastTime = currentTime;
+            }
+
+            // Smooth camera rotation
+            rotationX += (targetRotationX - rotationX) * 0.05;
+            rotationY += (targetRotationY - rotationY) * 0.05;
+
+            // Animate binary digits
+            binaryDigits.forEach((digit, index) => {
+                // Move digits
+                digit.sprite.position.add(digit.velocity);
+                
+                // Wrap around boundaries
+                if (digit.sprite.position.x > 50) digit.sprite.position.x = -50;
+                if (digit.sprite.position.x < -50) digit.sprite.position.x = 50;
+                if (digit.sprite.position.y > 50) digit.sprite.position.y = -50;
+                if (digit.sprite.position.y < -50) digit.sprite.position.y = 50;
+                if (digit.sprite.position.z > 50) digit.sprite.position.z = -50;
+                if (digit.sprite.position.z < -50) digit.sprite.position.z = 50;
+
+                // Subtle floating animation
+                digit.sprite.position.y += Math.sin(currentTime * 0.001 + index * 0.1) * 0.01;
+                
+                // Rotate sprites to face camera with slight variation
+                digit.sprite.material.rotation += digit.rotationSpeed;
+                
+                // Pulse opacity
+                digit.sprite.material.opacity = 0.6 + Math.sin(currentTime * 0.002 + index * 0.05) * 0.3;
+            });
+
+            // Apply global rotation
+            scene.rotation.x = rotationX;
+            scene.rotation.y = rotationY + currentTime * 0.0002;
+
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Start animation
+        animate();
+
+        // Randomly regenerate some digits
+        setInterval(() => {
+            const randomIndex = Math.floor(Math.random() * binaryDigits.length);
+            const digit = binaryDigits[randomIndex];
+            const wasOne = digit.isOne;
+            digit.isOne = Math.random() > 0.5;
+            
+            scene.remove(digit.sprite);
+            const material = digit.isOne ? oneMaterial : zeroMaterial;
+            digit.sprite = new THREE.Sprite(material);
+            digit.sprite.position.copy(binaryDigits[randomIndex].sprite.position);
+            const scale = Math.random() * 3 + 1;
+            digit.sprite.scale.set(scale, scale, 1);
+            scene.add(digit.sprite);
+            
+            // Update counters
+            if (wasOne && !digit.isOne) {
+                onesCount--;
+                zerosCount++;
+            } else if (!wasOne && digit.isOne) {
+                onesCount++;
+                zerosCount--;
+            }
+            
+            document.getElementById('onesCount').textContent = onesCount;
+            document.getElementById('zerosCount').textContent = zerosCount;
+        }, 500);
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+<div className="relative w-full h-screen">
+
+<div className="absolute top-0 left-0 w-full z-10 p-6 bg-gradient-to-b from-gray-950/80 to-transparent">
+<div className="flex items-center justify-between animate-fadeIn" style={{animationDelay: `0.2s`}}>
+<div>
+<h1 className="text-2xl font-semibold tracking-tight text-white mb-1">Binary Matrix</h1>
+<p className="text-gray-400 text-sm">Interactive 3D visualization of digital data streams</p>
+</div>
+<div className="flex items-center space-x-4">
+<div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-lg px-3 py-2">
+<span className="text-xs text-gray-400 font-mono">DIGITS</span>
+<span className="text-sm text-emerald-400 font-mono ml-2" id="particleCount">200</span>
+</div>
+<div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-lg px-3 py-2">
+<span className="text-xs text-gray-400 font-mono">FPS</span>
+<span className="text-sm text-cyan-400 font-mono ml-2" id="fpsCounter">60</span>
+</div>
+</div>
+</div>
+</div>
+
+<div className="absolute bottom-6 left-6 z-10 space-y-3 animate-slideUp" style={{animationDelay: `0.6s`}}>
+<div className="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-lg p-4">
+<h3 className="text-sm font-medium text-white mb-3">Controls</h3>
+<div className="space-y-2 text-xs text-gray-400">
+<div className="flex items-center space-x-2">
+<span className="w-4 h-4 bg-gray-800 rounded border text-center leading-none">↑</span>
+<span>Zoom In</span>
+</div>
+<div className="flex items-center space-x-2">
+<span className="w-4 h-4 bg-gray-800 rounded border text-center leading-none">↓</span>
+<span>Zoom Out</span>
+</div>
+<div className="flex items-center space-x-2">
+<span className="w-8 h-4 bg-gray-800 rounded border text-center text-xs leading-none">DRAG</span>
+<span>Rotate View</span>
+</div>
+<div className="flex items-center space-x-2">
+<span className="w-8 h-4 bg-gray-800 rounded border text-center text-xs leading-none">SPACE</span>
+<span>Regenerate</span>
+</div>
+</div>
+</div>
+</div>
+
+<div className="absolute bottom-6 right-6 z-10 animate-slideUp" style={{animationDelay: `0.8s`}}>
+<div className="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-lg p-4 min-w-48">
+<h3 className="text-sm font-medium text-white mb-3">Binary Stream</h3>
+<div className="space-y-2">
+<div className="flex justify-between items-center">
+<span className="text-xs text-gray-400">Data Flow</span>
+<div className="flex items-center space-x-1">
+<div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+<span className="text-xs text-emerald-400 font-mono">STREAMING</span>
+</div>
+</div>
+<div className="flex justify-between items-center">
+<span className="text-xs text-gray-400">Ones</span>
+<span className="text-xs text-emerald-400 font-mono" id="onesCount">100</span>
+</div>
+<div className="flex justify-between items-center">
+<span className="text-xs text-gray-400">Zeros</span>
+<span className="text-xs text-cyan-400 font-mono" id="zerosCount">100</span>
+</div>
+</div>
+</div>
+</div>
+
+<div className="w-full h-full" id="canvas-container"></div>
+</div>
+
+
+
+    </>
+  );
+}

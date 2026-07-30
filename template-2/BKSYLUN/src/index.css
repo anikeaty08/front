@@ -1,0 +1,21 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+/* Стили для скрытия скроллбара */
+.no-scrollbar {
+-ms-overflow-style: none;  /* IE и Edge */
+scrollbar-width: none;     /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+display: none;             /* Chrome, Safari и Opera */
+}
+

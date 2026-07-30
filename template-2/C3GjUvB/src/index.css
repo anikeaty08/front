@@ -1,0 +1,21 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body { font-family: 'DM Sans', sans-serif; }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 180, 216, 0.3);
+    }
+    .feature-icon {
+      background: linear-gradient(135deg, rgba(0, 180, 216, 0.2) 0%, rgba(0, 180, 216, 0.05) 100%);
+    }
+  

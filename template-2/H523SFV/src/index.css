@@ -1,0 +1,17 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+*{font-family:'Inter',sans-serif}
+.cards{perspective:1200px}
+.card{transition:.6s cubic-bezier(.4,0,.2,1);cursor:grab}
+.card:active{cursor:grabbing}
+

@@ -1,0 +1,116 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #1a1c20;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .card-container {
+      opacity: 0;
+      transform: scale(0.95);
+      animation: fadeInScale 0.8s ease-out forwards;
+    }
+    @keyframes fadeInScale {
+      0% { opacity: 0; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes tracePath {
+      0% { stroke-dashoffset: 1000; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .phone-body {
+      animation: slideUp 0.8s ease-out 0.3s forwards;
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    .screen-shape {
+      animation: slideUp 0.8s ease-out 0.5s forwards;
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    .screen-content {
+      animation: slideUp 0.8s ease-out 0.7s forwards;
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    .play-button {
+      animation: slideUp 0.8s ease-out 0.9s forwards;
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    .card-text {
+      animation: slideUp 0.6s ease-out 1s forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .card-button {
+      animation: slideUp 0.6s ease-out 1.2s forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .phone-path {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: tracePath 4s linear 1.1s infinite;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(10px);
+      opacity: 0.6;
+      mix-blend-mode: screen;
+    }
+    .blob-1 {
+      width: 60%;
+      height: 60%;
+      background: #7b5ee0;
+      animation: blob1 15s ease-in-out infinite alternate;
+    }
+    .blob-2 {
+      width: 45%;
+      height: 45%;
+      background: #4d7cfe;
+      animation: blob2 18s ease-in-out infinite alternate;
+    }
+    .blob-3 {
+      width: 40%;
+      height: 40%;
+      background: #9364f7;
+      animation: blob3 20s ease-in-out infinite alternate;
+    }
+    @keyframes blob1 {
+      0%, 100% { transform: translate(-20%, -20%); }
+      25% { transform: translate(10%, 15%); }
+      50% { transform: translate(20%, -10%); }
+      75% { transform: translate(-10%, 20%); }
+    }
+    @keyframes blob2 {
+      0%, 100% { transform: translate(20%, 20%); }
+      25% { transform: translate(-15%, 10%); }
+      50% { transform: translate(-20%, -15%); }
+      75% { transform: translate(15%, -20%); }
+    }
+    @keyframes blob3 {
+      0%, 100% { transform: translate(0%, 0%); }
+      25% { transform: translate(-20%, -15%); }
+      50% { transform: translate(15%, 20%); }
+      75% { transform: translate(20%, -20%); }
+    }
+  

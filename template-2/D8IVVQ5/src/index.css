@@ -1,0 +1,119 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body { font-family: 'Inter', sans-serif; }
+:root {
+--mx: 50%;
+--my: 50%;
+--s: 1;
+--o: 0;
+--rx: 0deg;
+--ry: 0deg;
+--posx: 50%;
+--posy: 50%;
+--hyp: 0;
+}
+.hotel-card {
+--radius: 20px;
+transform: translate3d(0, 0, 0);
+transition: transform 0.3s ease;
+}
+.hotel-card:hover {
+transform: translate3d(0, -4px, 0) scale(1.02);
+}
+.hotel-card__rotator {
+transform: rotateY(var(--rx)) rotateX(var(--ry));
+border-radius: var(--radius);
+outline: none;
+transition: box-shadow 0.3s ease;
+position: relative;
+overflow: hidden;
+}
+.hotel-card.active .hotel-card__rotator {
+box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+}
+.hotel-card__shine {
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+border-radius: var(--radius);
+opacity: calc(var(--o) * 0.3);
+mix-blend-mode: soft-light;
+pointer-events: none;
+z-index: 1;
+background: radial-gradient(
+circle at var(--mx) var(--my),
+rgba(255, 255, 255, 0.1) 0%,
+rgba(99, 102, 241, 0.2) 30%,
+transparent 70%
+);
+}
+.hotel-card__content {
+position: relative;
+z-index: 2;
+}
+.popover {
+opacity: 0;
+transform: translateY(-10px);
+transition: all 0.2s ease;
+pointer-events: none;
+}
+.popover.show {
+opacity: 1;
+transform: translateY(0);
+pointer-events: auto;
+}
+.filter-chip {
+transition: all 0.2s ease;
+}
+.filter-chip:hover {
+transform: translateY(-1px);
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.filter-chip.active {
+background: #6366f1;
+color: white;
+}
+/* Reduced particle count */
+#particles-js {
+opacity: 0.4;
+}
+/* Dark mode scrollbar */
+::-webkit-scrollbar {
+width: 8px;
+}
+::-webkit-scrollbar-track {
+background: #1f2937;
+}
+::-webkit-scrollbar-thumb {
+background: #4b5563;
+border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+background: #6b7280;
+}
+
+
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.6;
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 1;
+      }
+    }
+  

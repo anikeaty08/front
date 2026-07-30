@@ -1,0 +1,23 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body { margin: 0; overflow-x: hidden; background: #000; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .gradient-border { position: relative; background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1)); }
+        .gradient-border::before { content: ''; position: absolute; inset: 0; padding: 2px; background: linear-gradient(135deg, #4f46e5, #3b82f6, #8b5cf6, #f59e0b); border-radius: inherit; mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: xor; -webkit-mask-composite: xor; }
+        .schema-gradient { background: linear-gradient(135deg, #4f46e5, #3b82f6, #8b5cf6, #f59e0b); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-glow { box-shadow: 0 0 100px rgba(79, 70, 229, 0.3), 0 0 200px rgba(59, 130, 246, 0.2); }
+        .card-hover { transition: all 0.3s ease; cursor: pointer; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(79, 70, 229, 0.2); }
+        .connection-line { stroke-dasharray: 8; animation: connectionFlow 2s linear infinite; }
+        #aurora-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+    

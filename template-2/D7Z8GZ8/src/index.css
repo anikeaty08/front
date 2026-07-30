@@ -1,0 +1,15 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .font-neuemontreal { font-family: 'Neue Montreal', sans-serif; }
+    .font-satoshi { font-family: 'Satoshi', sans-serif; }
+  

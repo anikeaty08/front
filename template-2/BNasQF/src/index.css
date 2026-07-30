@@ -1,0 +1,36 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body { font-family: 'Inter', sans-serif; }
+    #vanta-canvas { overflow: hidden; }
+    .card-container {
+      position: relative;
+      z-index: 0;
+    }
+    .card-container::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background: linear-gradient(to bottom right, #525252, transparent, #262626);
+      border-radius: 0.75rem;
+      z-index: -1;
+    }
+    .card-content {
+      border-radius: 0.75rem;
+      overflow: hidden;
+      background: #171717;
+    }
+    .divider-gradient {
+      height: 1px;
+      background: linear-gradient(to right, transparent, #525252, transparent);
+    }
+  

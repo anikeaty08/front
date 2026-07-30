@@ -1,0 +1,40 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .fade-in-scale { opacity:0; transform:scale(0.93); animation: fadeInScale 0.7s cubic-bezier(.33,.79,.41,1.01) 0.15s forwards;}
+    @keyframes fadeInScale {to {opacity:1; transform:scale(1);}}
+    .slide-up   { opacity:0; transform:translateY(60px); animation:slideUp 0.62s cubic-bezier(.63,.23,.46,1.14) forwards; animation-play-state:paused;}
+    @keyframes slideUp {to {opacity:1; transform:translateY(0);}}
+    .sf-bold { font-family:'SF Pro',Arial,sans-serif; font-weight:700;}
+    .sf-semi { font-family:'SF Pro',Arial,sans-serif; font-weight:600;}
+    .sf-regular { font-family:'SF Pro',Arial,sans-serif; font-weight:400;}
+    .no-scrollbar::-webkit-scrollbar {display:none;}
+    .no-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
+    .toggle-knob { transition:transform .22s cubic-bezier(.65,.05,.39,.97), background .18s; box-shadow: 0 2px 6px 0 rgba(0,0,0,0.14);}
+    .toggle-outer { transition:background .23s cubic-bezier(.65,.05,.39,.97);}
+    .mockup-light { background:linear-gradient(130deg,#f7f7fa 60%, #e6ecf3 100%)!important; }
+    .screen-light { background:#fafaff!important; }
+    /* Status bar for light mode */
+    .screen-light .status-bar-text,
+    .screen-light .status-bar-svg * { color:#222!important; stroke:#222!important; fill:#222!important; }
+    /* Home indicator for light mode */
+    .screen-light .home-indicator { background:#222!important; }
+    .screen-light .text-white { color:#1f2937!important; }
+    .screen-light .opacity-70 { color:#555!important; }
+    .screen-light .bg-blue-500 { background-color:#2563eb!important; }
+    .screen-light .hover\:bg-blue-400:hover { background-color:#60a5fa!important; }
+    .screen-light .active\:bg-blue-600:active { background-color:#1e40af!important; }
+    .screen-light .bg-gradient-to-r { background:linear-gradient(90deg,#c7d2fe99 50%,#e0e7ff99 100%)!important; }
+    .screen-light .hover\:bg-white\/5:hover { background-color: #3331!important;}
+    .screen-light .rounded-full {background: #e0e7ff!important;}
+    .screen-light button {color:#fff;}
+  
